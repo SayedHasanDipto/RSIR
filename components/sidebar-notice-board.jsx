@@ -1,6 +1,7 @@
 'use client';
 
-import { Clock, Facebook, Calendar, Bell, ArrowRight } from 'lucide-react';
+import { Clock, Calendar, Bell, ArrowRight } from '@gravity-ui/icons';
+import { FaFacebook } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { StaggerReveal } from './stagger-reveal';
 import { RevealAnimation } from './reveal-animation';
@@ -15,7 +16,7 @@ export function SidebarNoticeBoard() {
             <div className="bg-white rounded-3xl border border-border/50 p-8 md:p-10 shadow-xl shadow-gray-100 h-full">
               <div className="flex items-center gap-4 mb-10">
                 <div className="w-12 h-12 bg-gold/10 rounded-2xl flex items-center justify-center text-gold">
-                  <Calendar size={28} />
+                  <Calendar className="w-7 h-7" />
                 </div>
                 <div>
                   <h3 className="text-3xl font-extrabold text-primary">Upcoming Classes</h3>
@@ -42,7 +43,7 @@ export function SidebarNoticeBoard() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2 mt-4 text-sm font-medium text-foreground/60">
-                      <Clock size={16} className="text-gold" />
+                      <Clock className="w-4 h-4 text-gold" />
                       <span>{cls.time} • <span className="text-primary font-bold">{cls.seats} seats available</span></span>
                     </div>
                   </motion.div>
@@ -54,7 +55,7 @@ export function SidebarNoticeBoard() {
                 whileTap={{ scale: 0.98 }}
                 className="w-full mt-10 bg-primary text-white py-5 rounded-2xl font-bold transition-all shadow-lg flex items-center justify-center gap-2"
               >
-                View Full Schedule <ArrowRight size={20} />
+                View Full Schedule <ArrowRight className="w-5 h-5" />
               </motion.button>
             </div>
           </RevealAnimation>
@@ -66,7 +67,7 @@ export function SidebarNoticeBoard() {
               <div className="bg-white rounded-3xl border border-border/50 p-8 shadow-xl shadow-gray-100">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center text-gold">
-                    <Bell size={22} />
+                    <Bell className="w-5 h-5" />
                   </div>
                   <h3 className="text-xl font-extrabold text-primary">Notice Board</h3>
                 </div>
@@ -100,7 +101,7 @@ export function SidebarNoticeBoard() {
               <div className="bg-white rounded-3xl border border-border/50 p-8 shadow-xl shadow-gray-100">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 bg-blue-600/10 rounded-xl flex items-center justify-center text-blue-600">
-                    <Facebook size={22} />
+                    <FaFacebook className="w-5 h-5" />
                   </div>
                   <h3 className="text-xl font-extrabold text-primary">Stay Connected</h3>
                 </div>
@@ -114,7 +115,7 @@ export function SidebarNoticeBoard() {
                   whileTap={{ scale: 0.98 }}
                   className="w-full bg-[#1877F2] text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-blue-200 flex items-center justify-center gap-3"
                 >
-                  <Facebook size={20} fill="white" />
+                  <FaFacebook className="w-5 h-5" />
                   Follow on Facebook
                 </motion.button>
 

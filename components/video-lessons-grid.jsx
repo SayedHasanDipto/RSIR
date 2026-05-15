@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Play, ArrowRight } from 'lucide-react';
+import { Play, ArrowRight } from '@gravity-ui/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { lessons } from '@/lib/lessons-data';
+import Image from 'next/image';
 
 const englishVideos = lessons.filter(l => l.category === 'English Hub');
 const ihcVideos = lessons.filter(l => l.category === 'IHC Chronicles');
@@ -89,18 +90,28 @@ export function VideoLessonsGrid() {
                   >
                     {/* Thumbnail */}
                     <div className="relative w-full h-48 bg-gradient-to-br from-primary-navy-light to-primary-navy flex items-center justify-center overflow-hidden">
-                      <motion.div 
-                        whileHover={{ scale: 1.2, rotate: 5 }}
-                        className="text-7xl opacity-80 group-hover:opacity-100 transition-opacity drop-shadow-xl"
-                      >
-                        {video.thumbnail}
-                      </motion.div>
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center backdrop-blur-[2px] opacity-0 group-hover:opacity-100">
+                      {video.thumbnailUrl ? (
+                        <Image 
+                          src={video.thumbnailUrl} 
+                          alt={video.title} 
+                          fill 
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <Image 
+                          src="/placeholder.jpg" 
+                          alt={video.title} 
+                          fill 
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      )}
+                      
+                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/50 transition-all flex items-center justify-center backdrop-blur-[2px] opacity-0 group-hover:opacity-100">
                         <motion.div
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                         >
-                          <Play size={50} className="text-white fill-white drop-shadow-2xl" />
+                          <Play className="w-12 h-12 text-white fill-white drop-shadow-2xl" />
                         </motion.div>
                       </div>
                     </div>
@@ -127,7 +138,7 @@ export function VideoLessonsGrid() {
           <Link href="/lessons">
             <button className="inline-flex items-center gap-2 px-8 py-4 bg-gold text-primary font-bold rounded-xl hover:bg-gold-light transition-all shadow-lg hover:shadow-gold/20 group">
               View All Lessons 
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </Link>
         </div>

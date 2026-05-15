@@ -32,7 +32,11 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-gold/30;
+    @apply bg-background text-foreground antialiased selection:bg-gold/30 cursor-none;
+  }
+  
+  a, button, input, select, textarea, [role="button"] {
+    @apply cursor-auto;
   }
 }
 

@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { BookOpen, Clock, ArrowRight, House, Palette } from '@gravity-ui/icons';
+import { FaMicroscope, FaGlobe, FaLightbulb, FaScroll } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { RevealAnimation } from './reveal-animation';
 
@@ -11,8 +12,9 @@ const articles = [
     title: 'The Splendor of Islamic Architecture',
     category: 'Culture',
     date: 'May 10, 2024',
+    readTime: '6 min read',
     excerpt: 'Explore the masterpieces of Islamic architecture across centuries.',
-    image: '🏛️',
+    image: <House />,
     color: 'from-blue-100 to-blue-50',
   },
   {
@@ -20,8 +22,9 @@ const articles = [
     title: 'Understanding the Quran: A Scholarly Approach',
     category: 'Islamic Studies',
     date: 'May 8, 2024',
+    readTime: '8 min read',
     excerpt: 'Deep dive into the interpretation and wisdom of the Quran.',
-    image: '📜',
+    image: <FaScroll />,
     color: 'from-amber-100 to-amber-50',
   },
   {
@@ -29,8 +32,9 @@ const articles = [
     title: 'The Contributions of Islamic Scientists',
     category: 'History',
     date: 'May 5, 2024',
+    readTime: '7 min read',
     excerpt: 'Discover the groundbreaking achievements of Islamic scholars.',
-    image: '🔬',
+    image: <FaMicroscope />,
     color: 'from-green-100 to-green-50',
   },
   {
@@ -38,8 +42,9 @@ const articles = [
     title: 'Islamic Calligraphy: Art Meets Spirituality',
     category: 'Art',
     date: 'May 1, 2024',
+    readTime: '5 min read',
     excerpt: 'The beauty and significance of Islamic calligraphy through time.',
-    image: '🎨',
+    image: <Palette />,
     color: 'from-purple-100 to-purple-50',
   },
   {
@@ -47,8 +52,9 @@ const articles = [
     title: 'Daily Life in the Ottoman Empire',
     category: 'History',
     date: 'April 28, 2024',
+    readTime: '6 min read',
     excerpt: 'A glimpse into the culture and society of the Ottoman era.',
-    image: '🏘️',
+    image: <FaGlobe />,
     color: 'from-rose-100 to-rose-50',
   },
   {
@@ -56,8 +62,9 @@ const articles = [
     title: 'Islamic Philosophy and Ethics',
     category: 'Philosophy',
     date: 'April 25, 2024',
+    readTime: '9 min read',
     excerpt: 'Examining the philosophical foundations of Islamic thought.',
-    image: '🤔',
+    image: <FaLightbulb />,
     color: 'from-indigo-100 to-indigo-50',
   },
 ];
@@ -89,7 +96,7 @@ export function IhcChronicles() {
                 <div className={`relative bg-gradient-to-br ${article.color} h-56 flex items-center justify-center text-7xl overflow-hidden`}>
                   <motion.div 
                     whileHover={{ scale: 1.2, rotate: -5 }}
-                    className="relative z-10 transition-transform duration-500"
+                    className="relative z-10 transition-transform duration-500 w-24 h-24 text-primary flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"
                   >
                     {article.image}
                   </motion.div>
@@ -108,6 +115,10 @@ export function IhcChronicles() {
                   <h3 className="text-xl font-bold text-primary mb-3 line-clamp-2 group-hover:text-gold transition-colors leading-tight">
                     {article.title}
                   </h3>
+                  <div className="flex items-center gap-2 text-foreground/50 text-sm font-medium mb-3">
+                    <Clock className="w-4 h-4 text-gold" />
+                    <span>{article.readTime}</span>
+                  </div>
                   <p className="text-foreground/60 text-sm line-clamp-3 mb-6 leading-relaxed">
                     {article.excerpt}
                   </p>
@@ -132,8 +143,8 @@ export function IhcChronicles() {
                 whileTap={{ scale: 0.98 }}
                 className="bg-primary hover:bg-primary-navy-light text-white px-10 py-4 rounded-xl font-bold transition-all shadow-lg hover:shadow-primary/20 flex items-center gap-2 group"
               >
-                Explore All Articles 
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                View All Articles 
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </motion.button>
             </Link>
           </RevealAnimation>

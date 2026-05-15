@@ -7,6 +7,7 @@ import { lessons } from '@/lib/lessons-data';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { RevealAnimation } from '@/components/reveal-animation';
+import Image from 'next/image';
 
 export default function LessonPage() {
   const params = useParams();
@@ -109,8 +110,13 @@ export default function LessonPage() {
             <RevealAnimation direction="right">
               <div className="bg-white rounded-3xl border border-border/50 p-8 shadow-xl shadow-gray-100">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-navy-light rounded-2xl flex items-center justify-center text-3xl shadow-lg">
-                    👨‍🏫
+                  <div className="w-16 h-16 rounded-2xl overflow-hidden relative shadow-lg shrink-0">
+                    <Image
+                      src="/hero.jpg"
+                      alt={lesson.instructor}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                   <div>
                     <p className="text-sm font-bold text-gold uppercase tracking-tighter">Instructor</p>

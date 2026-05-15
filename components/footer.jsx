@@ -1,6 +1,7 @@
 'use client';
 
-import { Facebook, Youtube, Mail, Phone, MapPin, ArrowUp } from 'lucide-react';
+import { FaFacebook, FaYoutube } from 'react-icons/fa';
+import { Envelope, Handset, MapPin, ArrowUp } from '@gravity-ui/icons';
 import { motion } from 'framer-motion';
 import { RevealAnimation } from './reveal-animation';
 
@@ -20,7 +21,7 @@ export function Footer() {
           {/* About */}
           <RevealAnimation direction="up">
             <div className="flex items-center gap-3 mb-6 group">
-              <motion.div 
+              <motion.div
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.5 }}
                 className="w-10 h-10 bg-gold rounded-xl flex items-center justify-center shadow-lg"
@@ -38,14 +39,14 @@ export function Footer() {
                 whileHover={{ y: -5, backgroundColor: '#d4af37', color: '#1a2f5a' }}
                 className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center transition-all border border-white/10"
               >
-                <Facebook size={18} />
+                <FaFacebook className="w-[18px] h-[18px]" />
               </motion.a>
               <motion.a
                 href="#"
                 whileHover={{ y: -5, backgroundColor: '#d4af37', color: '#1a2f5a' }}
                 className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center transition-all border border-white/10"
               >
-                <Youtube size={18} />
+                <FaYoutube className="w-[18px] h-[18px]" />
               </motion.a>
             </div>
           </RevealAnimation>
@@ -61,8 +62,8 @@ export function Footer() {
                 { label: 'Resource Bank', href: '/#resources' }
               ].map((item) => (
                 <li key={item.label}>
-                  <motion.a 
-                    href={item.href} 
+                  <motion.a
+                    href={item.href}
                     whileHover={{ x: 5, color: '#d4af37' }}
                     className="text-white/60 hover:text-gold transition-colors text-sm font-medium inline-block"
                   >
@@ -79,8 +80,8 @@ export function Footer() {
             <ul className="space-y-3">
               {['Study Materials', 'Video Library', 'Blog Articles', 'FAQs'].map((link) => (
                 <li key={link}>
-                  <motion.a 
-                    href="#" 
+                  <motion.a
+                    href="#"
                     whileHover={{ x: 5, color: '#d4af37' }}
                     className="text-white/60 hover:text-gold transition-colors text-sm font-medium inline-block"
                   >
@@ -97,23 +98,23 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-gold">
-                  <Mail size={16} />
+                  <Envelope className="w-4 h-4" />
                 </div>
                 <a href="mailto:info@robiulislam.com" className="text-white/60 hover:text-gold transition-colors text-sm font-medium">
-                  info@robiulislam.com
+                  robiul240du@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-gold">
-                  <Phone size={16} />
+                  <Handset className="w-4 h-4" />
                 </div>
                 <a href="tel:+1234567890" className="text-white/60 hover:text-gold transition-colors text-sm font-medium">
-                  +1 (234) 567-890
+                  +880 19137 78536
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-gold mt-1">
-                  <MapPin size={16} />
+                  <MapPin className="w-4 h-4" />
                 </div>
                 <span className="text-white/60 text-sm font-medium leading-relaxed">
                   Online Platform, Serving Globally
@@ -128,7 +129,7 @@ export function Footer() {
           <p className="text-white/40 text-sm font-medium">
             &copy; 2024 Robiul Islam. All rights reserved. Designed for Excellence.
           </p>
-          
+
           <div className="flex gap-8 text-xs font-bold uppercase tracking-widest text-white/40">
             <a href="#" className="hover:text-gold transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-gold transition-colors">Terms of Service</a>
@@ -141,7 +142,7 @@ export function Footer() {
             className="w-12 h-12 bg-gold text-primary-navy rounded-2xl flex items-center justify-center shadow-xl shadow-gold/20"
             aria-label="Scroll to top"
           >
-            <ArrowUp size={24} />
+            <ArrowUp className="w-6 h-6" />
           </motion.button>
         </div>
       </div>

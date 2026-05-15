@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, FileText } from 'lucide-react';
+import { File, ArrowDownToLine } from '@gravity-ui/icons';
 import { motion } from 'framer-motion';
 import { StaggerReveal } from './stagger-reveal';
 import { RevealAnimation } from './reveal-animation';
@@ -50,7 +50,7 @@ export function ResourceBank() {
                   >
                     <td className="px-4 sm:px-8 py-5">
                       <div className="flex items-center gap-2 sm:gap-3">
-                        <FileText size={18} className="text-gold flex-shrink-0" />
+                        <File className="w-5 h-5 text-gold flex-shrink-0" />
                         <span className="font-bold text-primary line-clamp-1">{resource.name}</span>
                       </div>
                     </td>
@@ -72,7 +72,7 @@ export function ResourceBank() {
                           whileTap={{ scale: 0.95 }}
                           className="flex items-center gap-2 bg-gold text-primary px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold transition-all shadow-md group"
                         >
-                          <Download size={16} className="group-hover:translate-y-1 transition-transform" />
+                          <ArrowDownToLine className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
                           <span className="hidden lg:inline">Download</span>
                         </motion.button>
                       </div>

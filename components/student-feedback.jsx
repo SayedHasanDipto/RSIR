@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, QuoteOpen } from '@gravity-ui/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Counter } from './counter';
 import { RevealAnimation } from './reveal-animation';
@@ -103,7 +103,7 @@ export function StudentFeedback() {
         {/* Testimonials Slider */}
         <div className="relative max-w-4xl mx-auto">
           <div className="absolute -top-10 -left-10 text-gold opacity-10 select-none">
-            <Quote size={120} />
+            <QuoteOpen className="w-32 h-32" />
           </div>
           
           <div className="bg-white rounded-3xl shadow-2xl shadow-gray-200 border border-border/50 p-8 md:p-16 relative z-10 overflow-hidden">
@@ -136,7 +136,7 @@ export function StudentFeedback() {
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.3 + (i * 0.1) }}
                     >
-                      <Star size={24} className="fill-gold text-gold" />
+                      <Star className="w-6 h-6 fill-gold text-gold" />
                     </motion.div>
                   ))}
                 </div>
@@ -184,7 +184,7 @@ export function StudentFeedback() {
                   className="bg-primary text-white p-4 rounded-2xl shadow-lg hover:shadow-primary/20 transition-all"
                   aria-label="Previous testimonial"
                 >
-                  <ChevronLeft size={24} />
+                  <ChevronLeft className="w-6 h-6" />
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
@@ -193,7 +193,7 @@ export function StudentFeedback() {
                   className="bg-primary text-white p-4 rounded-2xl shadow-lg hover:shadow-primary/20 transition-all"
                   aria-label="Next testimonial"
                 >
-                  <ChevronRight size={24} />
+                  <ChevronRight className="w-6 h-6" />
                 </motion.button>
               </div>
             </div>

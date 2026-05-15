@@ -1,6 +1,7 @@
 'use client';
 
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '@gravity-ui/icons';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -29,6 +30,22 @@ export function HeroSection() {
       delay: 0.5,
     });
 
+    gsap.fromTo('.hero-image-wrapper', 
+      { 
+        clipPath: 'inset(100% 0% 0% 0%)',
+        scale: 1.2,
+        opacity: 0
+      },
+      { 
+        clipPath: 'inset(0% 0% 0% 0%)',
+        scale: 1,
+        opacity: 1,
+        duration: 1.5,
+        ease: 'expo.out',
+        delay: 0.8
+      }
+    );
+
     gsap.from('.hero-content > *', {
       opacity: 0,
       y: 30,
@@ -40,36 +57,38 @@ export function HeroSection() {
   }, { scope: containerRef });
 
   return (
-    <section 
-      id="home" 
+    <section
+      id="home"
       ref={containerRef}
       className="min-h-[85vh] flex items-center py-24 relative overflow-hidden bg-[#fafafa]"
     >
       {/* Background Motion */}
       <motion.div 
         animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: "linear"
-        }}
-        className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-gold/5 rounded-full blur-[100px]" 
-      />
-      <motion.div 
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.2, 0.4, 0.2],
+          scale: [1, 1.05, 1],
+          opacity: [0.2, 0.3, 0.2],
         }}
         transition={{
           duration: 20,
           repeat: Infinity,
+          ease: "linear"
+        }}
+        style={{ willChange: 'transform, opacity' }}
+        className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-gold/5 rounded-full blur-[100px] pointer-events-none" 
+      />
+      <motion.div 
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.1, 0.2, 0.1],
+        }}
+        transition={{
+          duration: 30,
+          repeat: Infinity,
           ease: "linear",
           delay: 2
         }}
-        className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px]" 
+        style={{ willChange: 'transform, opacity' }}
+        className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" 
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
@@ -77,7 +96,7 @@ export function HeroSection() {
           {/* Left Side - Text */}
           <div className="hero-content space-y-8">
             <div>
-              <h1 
+              <h1
                 ref={headlineRef}
                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] text-primary mb-6"
               >
@@ -89,15 +108,15 @@ export function HeroSection() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center md:justify-start">
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(22, 33, 62, 0.3)" }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-primary hover:bg-primary-navy-light text-white px-8 md:px-10 py-4 rounded-xl font-bold transition-all flex items-center gap-2 justify-center group"
               >
                 Explore Lessons
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </motion.button>
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.05, backgroundColor: "rgba(201, 173, 103, 0.1)" }}
                 whileTap={{ scale: 0.98 }}
                 className="border-2 border-gold text-primary px-8 md:px-10 py-4 rounded-xl font-bold transition-all text-center"
@@ -133,20 +152,24 @@ export function HeroSection() {
           <div className="flex justify-center md:justify-end mt-12 md:mt-0">
             <FloatingAnimation className="relative w-full max-w-sm md:max-w-md">
               <div className="absolute inset-0 bg-gradient-to-br from-gold/20 to-primary/20 rounded-3xl blur-3xl opacity-50"></div>
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.02 }}
-                className="relative bg-gradient-to-br from-primary via-primary-navy-light to-primary-navy rounded-3xl p-1 shadow-2xl overflow-hidden"
+                className="relative bg-gradient-to-br from-primary via-primary-navy-light to-primary-navy rounded-3xl p-1 shadow-2xl overflow-hidden hero-image-wrapper"
               >
-                <div className="bg-gradient-to-br from-primary-navy-light to-primary-navy rounded-2xl h-80 sm:h-96 md:h-[500px] flex items-center justify-center overflow-hidden">
-                  <div className="text-center text-white/90 px-6">
-                    <div className="text-5xl sm:text-7xl mb-4 sm:mb-6 drop-shadow-lg">👨‍🏫</div>
-                    <p className="text-xl sm:text-2xl font-bold mb-1">Robiul Islam</p>
-                    <p className="text-white/60 text-sm sm:text-base font-medium">Lead Educator & Historian</p>
-                  </div>
+                <div className="bg-gradient-to-br from-primary-navy-light to-primary-navy rounded-2xl h-80 sm:h-96 md:h-[500px] flex items-center justify-center overflow-hidden relative">
+                  <Image 
+                    src="/hero.jpg" 
+                    alt="Robiul Islam" 
+                    fill 
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    priority
+                  />
+                  {/* Subtle overlay for text readability if needed later */}
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500" />
                 </div>
               </motion.div>
-              
-              <motion.div 
+
+              <motion.div
                 initial={{ x: 30, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 1.5, duration: 0.8 }}

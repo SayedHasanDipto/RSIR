@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Bars, Xmark } from '@gravity-ui/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export function Navbar() {
@@ -81,7 +81,7 @@ export function Navbar() {
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden text-primary p-2"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <Xmark className="w-6 h-6" /> : <Bars className="w-6 h-6" />}
           </button>
         </div>
 
