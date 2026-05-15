@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1a2f5a;
+  --color-primary-navy: #1a2f5a;
+  --color-primary-navy-light: #2d4a8e;
+  --color-primary-navy-dark: #0f1a35;
+  
+  --color-white: #ffffff;
+  --color-off-white: #f8f9fb;
+  --color-light-gray: #e8eef5;
+  
+  --color-gold: #d4af37;
+  --color-gold-light: #e5c158;
+  --color-gold-dark: #b8941d;
+  
+  --color-background: var(--color-white);
+  --color-foreground: var(--color-primary-navy);
+  --color-card: var(--color-off-white);
+  --color-border: var(--color-light-gray);
+  --color-ring: var(--color-gold);
+
+  --radius-lg: 0.75rem;
+  --radius-md: calc(0.75rem - 2px);
+  --radius-sm: calc(0.75rem - 4px);
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-gold/30;
+  }
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
