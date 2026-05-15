@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Star, QuoteOpen } from '@gravity-ui/icons';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { Counter } from './counter';
 import { RevealAnimation } from './reveal-animation';
 
@@ -13,7 +14,7 @@ const testimonials = [
     role: 'IELTS Student',
     rating: 5,
     text: 'Robiul Islam\'s teaching methods are exceptional. I improved my IELTS score by 2 bands in just 3 months. His explanations are clear and engaging!',
-    avatar: '👩‍🎓',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80',
   },
   {
     id: 2,
@@ -21,7 +22,7 @@ const testimonials = [
     role: 'History Enthusiast',
     rating: 5,
     text: 'The Islamic History course is absolutely fascinating. I\'ve learned more in these lessons than I did in years of self-study. Highly recommended!',
-    avatar: '👨‍🎓',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
   },
   {
     id: 3,
@@ -29,7 +30,7 @@ const testimonials = [
     role: 'English Student',
     rating: 5,
     text: 'Fantastic instructor with incredible knowledge. The grammar lessons are comprehensive and easy to understand. This is the best online teaching I\'ve experienced.',
-    avatar: '👩‍💻',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80',
   },
   {
     id: 4,
@@ -37,7 +38,7 @@ const testimonials = [
     role: 'Professional Learner',
     rating: 5,
     text: 'I enrolled for career advancement and got much more than I expected. The content, delivery, and support are all top-notch. Worth every penny!',
-    avatar: '👨‍💼',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
   },
   {
     id: 5,
@@ -45,7 +46,7 @@ const testimonials = [
     role: 'Student',
     rating: 5,
     text: 'The combination of English and Islamic History lessons is unique. Robiul sir makes complex topics simple and interesting. Truly inspiring!',
-    avatar: '👩‍🏫',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80',
   },
 ];
 
@@ -122,9 +123,14 @@ export function StudentFeedback() {
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="text-7xl mb-8 bg-off-white w-24 h-24 flex items-center justify-center rounded-3xl shadow-inner"
+                  className="mb-8 w-24 h-24 relative rounded-full overflow-hidden shadow-xl ring-4 ring-gold/20"
                 >
-                  {currentTestimonial.avatar}
+                  <Image 
+                    src={currentTestimonial.avatar} 
+                    alt={currentTestimonial.name}
+                    fill
+                    className="object-cover"
+                  />
                 </motion.div>
 
                 {/* Rating */}

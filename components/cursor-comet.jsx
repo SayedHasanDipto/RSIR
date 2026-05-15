@@ -61,10 +61,10 @@ export function CursorComet() {
           style={{
             width: `${16 - i * 1.2}px`,
             height: `${16 - i * 1.2}px`,
-            backgroundColor: i === 0 ? '#d4af37' : '#e5c158',
+            backgroundColor: i === 0 ? '#3b82f6' : '#8b5cf6',
             opacity: 0.8 - i * 0.06,
             filter: `blur(${i * 1.5}px)`,
-            boxShadow: i < 3 ? '0 0 20px #d4af37' : 'none',
+            boxShadow: i < 3 ? '0 0 20px #8b5cf6' : 'none',
           }}
         />
       ))}
@@ -74,9 +74,9 @@ export function CursorComet() {
         ref={cursorRef} 
         animate={{
           scale: isHovering ? 1.5 : 1,
-          backgroundColor: isHovering ? '#ffffff' : '#d4af37',
+          backgroundColor: isHovering ? '#ffffff' : '#3b82f6',
         }}
-        className="fixed top-0 left-0 w-3 h-3 rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_20px_#d4af37] z-20"
+        className="fixed top-0 left-0 w-3 h-3 rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_20px_#3b82f6] z-20"
       />
       
       {/* Outer Orbiting Ring */}
@@ -85,7 +85,7 @@ export function CursorComet() {
         animate={{
           scale: isHovering ? 1.2 : 1,
           opacity: isHovering ? 0.6 : 0.2,
-          borderColor: isHovering ? '#ffffff' : '#d4af37'
+          borderColor: isHovering ? '#ffffff' : '#8b5cf6'
         }}
         className="fixed top-0 left-0 w-8 h-8 border-[1.5px] rounded-full -translate-x-1/2 -translate-y-1/2 z-10"
       />

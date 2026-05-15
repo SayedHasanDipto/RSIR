@@ -60,7 +60,7 @@ export function HeroSection() {
     <section
       id="home"
       ref={containerRef}
-      className="min-h-[85vh] flex items-center py-24 relative overflow-hidden bg-[#fafafa]"
+      className="min-h-[85vh] flex items-center py-24 relative overflow-hidden bg-background"
     >
       {/* Background Motion */}
       <motion.div 
@@ -173,7 +173,7 @@ export function HeroSection() {
                 initial={{ x: 30, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 1.5, duration: 0.8 }}
-                className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-2xl p-4 sm:p-5 shadow-2xl border border-border/50 backdrop-blur-sm bg-white/95 hidden sm:block"
+                className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-card rounded-2xl p-4 sm:p-5 shadow-2xl border border-border/50 backdrop-blur-sm bg-card/95 hidden sm:block"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center text-gold">

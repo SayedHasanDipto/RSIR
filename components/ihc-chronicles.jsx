@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { BookOpen, Clock, ArrowRight, House, Palette } from '@gravity-ui/icons';
-import { FaMicroscope, FaGlobe, FaLightbulb, FaScroll } from 'react-icons/fa';
+import { BookOpen, Clock, ArrowRight } from '@gravity-ui/icons';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { RevealAnimation } from './reveal-animation';
 
 const articles = [
@@ -14,7 +14,7 @@ const articles = [
     date: 'May 10, 2024',
     readTime: '6 min read',
     excerpt: 'Explore the masterpieces of Islamic architecture across centuries.',
-    image: <House />,
+    imageUrl: 'https://images.unsplash.com/photo-1542382156909-9ae37b3f56fd?w=800&q=80',
     color: 'from-blue-100 to-blue-50',
   },
   {
@@ -24,7 +24,7 @@ const articles = [
     date: 'May 8, 2024',
     readTime: '8 min read',
     excerpt: 'Deep dive into the interpretation and wisdom of the Quran.',
-    image: <FaScroll />,
+    imageUrl: 'https://images.unsplash.com/photo-1604933762023-7213af7ff7a7?w=800&q=80',
     color: 'from-amber-100 to-amber-50',
   },
   {
@@ -34,7 +34,7 @@ const articles = [
     date: 'May 5, 2024',
     readTime: '7 min read',
     excerpt: 'Discover the groundbreaking achievements of Islamic scholars.',
-    image: <FaMicroscope />,
+    imageUrl: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=800&q=80',
     color: 'from-green-100 to-green-50',
   },
   {
@@ -44,7 +44,7 @@ const articles = [
     date: 'May 1, 2024',
     readTime: '5 min read',
     excerpt: 'The beauty and significance of Islamic calligraphy through time.',
-    image: <Palette />,
+    imageUrl: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=800&q=80',
     color: 'from-purple-100 to-purple-50',
   },
   {
@@ -54,7 +54,7 @@ const articles = [
     date: 'April 28, 2024',
     readTime: '6 min read',
     excerpt: 'A glimpse into the culture and society of the Ottoman era.',
-    image: <FaGlobe />,
+    imageUrl: 'https://images.unsplash.com/photo-1527838832700-5059252407fa?w=800&q=80',
     color: 'from-rose-100 to-rose-50',
   },
   {
@@ -64,7 +64,7 @@ const articles = [
     date: 'April 25, 2024',
     readTime: '9 min read',
     excerpt: 'Examining the philosophical foundations of Islamic thought.',
-    image: <FaLightbulb />,
+    imageUrl: 'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?w=800&q=80',
     color: 'from-indigo-100 to-indigo-50',
   },
 ];
@@ -92,16 +92,22 @@ export function IhcChronicles() {
                 whileHover={{ y: -10 }}
                 className="bg-white rounded-2xl overflow-hidden border border-border/50 shadow-sm hover:shadow-2xl transition-all group cursor-pointer h-full flex flex-col"
               >
-                {/* Image/Emoji Area */}
-                <div className={`relative bg-gradient-to-br ${article.color} h-56 flex items-center justify-center text-7xl overflow-hidden`}>
+                {/* Image Area */}
+                <div className="relative h-56 w-full overflow-hidden">
                   <motion.div 
-                    whileHover={{ scale: 1.2, rotate: -5 }}
-                    className="relative z-10 transition-transform duration-500 w-24 h-24 text-primary flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.5 }}
+                    className="w-full h-full"
                   >
-                    {article.image}
+                    <Image 
+                      src={article.imageUrl}
+                      alt={article.title}
+                      fill
+                      className="object-cover"
+                    />
                   </motion.div>
-                  {/* Decorative background circle */}
-                  <div className="absolute w-32 h-32 bg-white/30 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
+                  {/* Subtle Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60" />
                 </div>
 
                 {/* Content */}

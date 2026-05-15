@@ -2,7 +2,6 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { SmoothScroll } from '@/components/smooth-scroll'
-import { CursorComet } from '@/components/cursor-comet'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -34,7 +33,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${_geist.variable} ${_geistMono.variable} scroll-smooth`}>
       <body suppressHydrationWarning={true} className="font-sans antialiased bg-background text-foreground selection:bg-gold/30">
-        <CursorComet />
         <SmoothScroll>
           {children}
         </SmoothScroll>

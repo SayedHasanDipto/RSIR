@@ -31,7 +31,7 @@ export function Navbar() {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-white/80 backdrop-blur-md border-b border-border shadow-sm py-2' 
+          ? 'bg-background/80 backdrop-blur-md border-b border-border shadow-sm py-2' 
           : 'bg-transparent py-4'
       }`}
     >
@@ -92,7 +92,7 @@ export function Navbar() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="md:hidden overflow-hidden bg-white"
+              className="md:hidden overflow-hidden bg-background"
             >
               <div className="px-2 pt-2 pb-6 space-y-1 border-t border-border">
                 {navItems.map((item, index) => (

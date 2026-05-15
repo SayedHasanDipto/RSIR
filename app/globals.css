@@ -14,10 +14,10 @@
   --color-gold-light: #e5c158;
   --color-gold-dark: #b8941d;
   
-  --color-background: var(--color-white);
-  --color-foreground: var(--color-primary-navy);
-  --color-card: var(--color-off-white);
-  --color-border: var(--color-light-gray);
+  --color-background: var(--bg-color);
+  --color-foreground: var(--fg-color);
+  --color-card: var(--card-color);
+  --color-border: var(--border-color);
   --color-ring: var(--color-gold);
 
   --radius-lg: 0.75rem;
@@ -27,16 +27,28 @@
 
 @custom-variant dark (&:is(.dark *));
 
+:root {
+  --bg-color: #ffffff;
+  --fg-color: #1a2f5a;
+  --card-color: #f8f9fb;
+  --border-color: #e8eef5;
+}
+
+.dark {
+  --bg-color: #0f1a35;
+  --fg-color: #ffffff;
+  --card-color: #1a2f5a;
+  --border-color: #2d4a8e;
+}
+
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-gold/30 cursor-none;
-  }
-  
-  a, button, input, select, textarea, [role="button"] {
-    @apply cursor-auto;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    @apply antialiased selection:bg-gold/30 transition-colors duration-300;
   }
 }
 

@@ -15,7 +15,7 @@ export function VideoLessonsGrid() {
   const videos = activeTab === 'english' ? englishVideos : ihcVideos;
 
   return (
-    <section id="english" className="py-24 bg-white overflow-hidden">
+    <section id="english" className="py-24 bg-background overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.h2 
@@ -86,7 +86,7 @@ export function VideoLessonsGrid() {
                       y: -10,
                       transition: { duration: 0.3 }
                     }}
-                    className="bg-white rounded-2xl overflow-hidden border border-border shadow-sm hover:shadow-2xl transition-shadow group cursor-pointer"
+                    className="bg-card rounded-2xl overflow-hidden border border-border shadow-sm hover:shadow-2xl transition-shadow group cursor-pointer"
                   >
                     {/* Thumbnail */}
                     <div className="relative w-full h-48 bg-gradient-to-br from-primary-navy-light to-primary-navy flex items-center justify-center overflow-hidden">
