@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Star, QuoteOpen } from '@gravity-ui/icons';
+import { ChevronLeft, ChevronRight, QuoteOpen } from '@gravity-ui/icons';
+import { Star } from 'lucide-react';
+import { FaStar } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Counter } from './counter';
@@ -106,7 +108,7 @@ export function StudentFeedback() {
           <div className="absolute -top-10 -left-10 text-gold opacity-10 select-none">
             <QuoteOpen className="w-32 h-32" />
           </div>
-          
+
           <div className="bg-white rounded-3xl shadow-2xl shadow-gray-200 border border-border/50 p-8 md:p-16 relative z-10 overflow-hidden">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
@@ -119,14 +121,14 @@ export function StudentFeedback() {
                 className="flex flex-col items-center text-center"
               >
                 {/* Avatar */}
-                <motion.div 
+                <motion.div
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.2 }}
                   className="mb-8 w-24 h-24 relative rounded-full overflow-hidden shadow-xl ring-4 ring-gold/20"
                 >
-                  <Image 
-                    src={currentTestimonial.avatar} 
+                  <Image
+                    src={currentTestimonial.avatar}
                     alt={currentTestimonial.name}
                     fill
                     className="object-cover"
@@ -174,14 +176,13 @@ export function StudentFeedback() {
                       setDirection(index > currentIndex ? 1 : -1);
                       setCurrentIndex(index);
                     }}
-                    className={`h-2.5 rounded-full transition-all duration-300 ${
-                      index === currentIndex ? 'bg-gold w-10' : 'bg-border w-2.5 hover:bg-gold/40'
-                    }`}
+                    className={`h-2.5 rounded-full transition-all duration-300 ${index === currentIndex ? 'bg-gold w-10' : 'bg-border w-2.5 hover:bg-gold/40'
+                      }`}
                     aria-label={`Go to testimonial ${index + 1}`}
                   />
                 ))}
               </div>
-              
+
               <div className="flex gap-4">
                 <motion.button
                   whileHover={{ scale: 1.1 }}
@@ -214,7 +215,7 @@ export function StudentFeedback() {
             { label: 'Success Rate', val: 98, suffix: '%' }
           ].map((stat, i) => (
             <RevealAnimation key={i} direction="up" delay={i * 0.1}>
-              <motion.div 
+              <motion.div
                 whileHover={{ y: -5 }}
                 className="bg-white rounded-2xl border border-border/50 p-8 text-center shadow-sm hover:shadow-xl transition-all"
               >

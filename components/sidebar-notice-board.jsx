@@ -31,7 +31,7 @@ export function SidebarNoticeBoard() {
                   { title: 'IELTS Speaking Workshop', type: 'English Hub Session', time: 'Friday, May 24 • 5:00 PM', color: 'border-gold', seats: 20 },
                   { title: 'Ottoman Empire Deep Dive', type: 'IHC Chronicles Session', time: 'Saturday, May 25 • 2:00 PM', color: 'border-primary', seats: 35 },
                 ].map((cls, i) => (
-                  <motion.div 
+                  <motion.div
                     key={i}
                     whileHover={{ x: 10, backgroundColor: "rgba(249, 250, 251, 1)" }}
                     className={`class-item border-l-4 ${cls.color} pl-6 py-5 rounded-r-2xl transition-all cursor-pointer bg-white group`}
@@ -50,7 +50,7 @@ export function SidebarNoticeBoard() {
                 ))}
               </StaggerReveal>
 
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.02, backgroundColor: "rgba(22, 33, 62, 0.95)" }}
                 whileTap={{ scale: 0.98 }}
                 className="w-full mt-10 bg-primary text-white py-5 rounded-2xl font-bold transition-all shadow-lg flex items-center justify-center gap-2"
@@ -73,7 +73,7 @@ export function SidebarNoticeBoard() {
                 </div>
 
                 <div className="space-y-4">
-                  <motion.div 
+                  <motion.div
                     initial={{ x: 20, opacity: 0 }}
                     whileInView={{ x: 0, opacity: 1 }}
                     whileHover={{ scale: 1.02 }}
@@ -82,7 +82,7 @@ export function SidebarNoticeBoard() {
                     <p className="text-xs font-bold text-gold mb-1 uppercase tracking-tighter">New Update</p>
                     <p className="text-sm font-bold text-primary leading-tight">Summer Batch Registration Open! Limited seats available.</p>
                   </motion.div>
-                  <motion.div 
+                  <motion.div
                     initial={{ x: 20, opacity: 0 }}
                     whileInView={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.1 }}
@@ -109,8 +109,9 @@ export function SidebarNoticeBoard() {
                 <p className="text-sm font-medium text-foreground/60 mb-8 leading-relaxed">
                   Join our community of 2.5K+ learners for daily tips, motivation, and study hacks.
                 </p>
-                
-                <motion.button 
+
+                <motion.button
+                  onClick={() => window.open('https://www.facebook.com/profile.php?id=100094579020051', '_blank')}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full bg-[#1877F2] text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-blue-200 flex items-center justify-center gap-3"
@@ -122,12 +123,12 @@ export function SidebarNoticeBoard() {
                 <div className="mt-6 p-4 bg-blue-50/50 rounded-2xl border border-blue-100/50">
                   <div className="flex items-center justify-center gap-2">
                     <div className="flex -space-x-2">
-                      {[1,2,3].map(i => (
+                      {[1, 2, 3].map(i => (
                         <div key={i} className="w-6 h-6 rounded-full bg-blue-200 border-2 border-white flex items-center justify-center text-[10px] font-bold text-blue-700">U{i}</div>
                       ))}
                     </div>
                     <p className="text-xs font-bold text-blue-700 uppercase tracking-tighter">
-                      2.5K+ followers
+                      1K+ followers
                     </p>
                   </div>
                 </div>
@@ -138,17 +139,17 @@ export function SidebarNoticeBoard() {
             <RevealAnimation direction="right" delay={0.3}>
               <div className="bg-gradient-to-br from-gold/10 via-white to-primary/5 rounded-3xl border border-gold/30 p-8 shadow-xl shadow-gold/5 relative overflow-hidden group">
                 <div className="absolute top-[-20%] right-[-20%] w-32 h-32 bg-gold/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
-                
+
                 <h3 className="text-xl font-extrabold text-primary mb-2 relative z-10">Get Updates</h3>
                 <p className="text-sm font-medium text-foreground/60 mb-6 leading-relaxed relative z-10">Subscribe for class reminders and exclusive learning materials.</p>
-                
+
                 <div className="space-y-3 relative z-10">
                   <input
                     type="email"
                     placeholder="Enter your email"
                     className="w-full px-5 py-4 rounded-2xl border border-border/50 bg-white/80 backdrop-blur-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-gold transition-all"
                   />
-                  <motion.button 
+                  <motion.button
                     whileHover={{ scale: 1.02, backgroundColor: "#b39a5c" }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full bg-gold text-primary py-4 rounded-2xl font-bold transition-all shadow-lg"
