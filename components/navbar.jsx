@@ -65,15 +65,26 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Right Side: Login Button */}
-          <div className="hidden md:block">
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-primary hover:bg-primary-navy-light text-white px-6 py-2 rounded-lg transition-all shadow-md hover:shadow-lg font-medium"
-            >
-              Login
-            </motion.button>
+          {/* Right Side: Auth Buttons */}
+          <div className="hidden md:flex items-center gap-4">
+            <Link href="/login">
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="text-primary hover:text-primary-navy-light font-medium px-4 py-2"
+              >
+                Login
+              </motion.button>
+            </Link>
+            <Link href="/signup">
+              <motion.button 
+                whileHover={{ scale: 1.05, boxShadow: "0 10px 20px -10px rgba(212, 175, 55, 0.5)" }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-gold hover:bg-gold-light text-primary-navy px-6 py-2 rounded-lg transition-all shadow-md font-bold"
+              >
+                Join Now
+              </motion.button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -108,14 +119,28 @@ export function Navbar() {
                     {item.label}
                   </motion.a>
                 ))}
-                <motion.button 
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: navItems.length * 0.1 }}
-                  className="w-full text-center py-3 bg-primary hover:bg-primary-navy-light text-white rounded-lg transition-colors font-medium mt-4 shadow-md"
-                >
-                  Login
-                </motion.button>
+                <div className="grid grid-cols-2 gap-3 mt-4">
+                  <Link href="/login" onClick={() => setIsOpen(false)}>
+                    <motion.button 
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: navItems.length * 0.1 }}
+                      className="w-full text-center py-3 border border-primary text-primary rounded-lg transition-colors font-medium"
+                    >
+                      Login
+                    </motion.button>
+                  </Link>
+                  <Link href="/signup" onClick={() => setIsOpen(false)}>
+                    <motion.button 
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: (navItems.length + 1) * 0.1 }}
+                      className="w-full text-center py-3 bg-primary text-white rounded-lg transition-colors font-medium shadow-md"
+                    >
+                      Join Now
+                    </motion.button>
+                  </Link>
+                </div>
               </div>
             </motion.div>
           )}
