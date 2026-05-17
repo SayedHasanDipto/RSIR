@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/navbar';
 import { HeroSection } from '@/components/hero-section';
-import { VideoLessonsGrid } from '@/components/video-lessons-grid';
+import { LearningPrograms } from '@/components/learning-programs';
 import { IhcChronicles } from '@/components/ihc-chronicles';
 import { ResourceBank } from '@/components/resource-bank';
 import { StudentFeedback } from '@/components/student-feedback';
@@ -12,7 +12,7 @@ export default function Home() {
     <main className="min-h-screen bg-background">
       <Navbar />
       <HeroSection />
-      <VideoLessonsGrid />
+      <LearningPrograms />
       <IhcChronicles />
       <ResourceBank />
       <StudentFeedback />
