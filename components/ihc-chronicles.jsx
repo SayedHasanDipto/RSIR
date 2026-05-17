@@ -144,6 +144,17 @@ export function IhcChronicles() {
     }
   };
 
+  const handleArchiveAccess = () => {
+    const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+    if (isLoggedIn) {
+      router.push('/articles');
+    } else {
+      setTargetRedirectUrl('/articles');
+      setSelectedArticle(null);
+      setShowAuthWall(true);
+    }
+  };
+
   const filteredArticles = activeCategory === 'all'
     ? articles
     : articles.filter(a => a.category === activeCategory);
@@ -282,12 +293,13 @@ export function IhcChronicles() {
         {/* Global Button */}
         <div className="flex justify-center mt-16">
           <RevealAnimation direction="up" delay={0.2}>
-            <Link href="/articles">
-              <button className="px-10 py-4 bg-gold hover:bg-gold-light text-primary-navy font-extrabold rounded-2xl shadow-xl shadow-gold/10 hover:shadow-gold/25 transition-all flex items-center gap-2 group">
-                সবগুলো আর্টিকেল দেখুন
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </Link>
+            <button
+              onClick={handleArchiveAccess}
+              className="px-10 py-4 bg-gold hover:bg-gold-light text-primary-navy font-extrabold rounded-2xl shadow-xl shadow-gold/10 hover:shadow-gold/25 transition-all flex items-center gap-2 group"
+            >
+              সবগুলো আর্টিকেল দেখুন
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
           </RevealAnimation>
         </div>
       </div>

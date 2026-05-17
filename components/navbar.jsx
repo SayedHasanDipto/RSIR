@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Bars, Xmark } from '@gravity-ui/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export function Navbar() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -23,6 +25,18 @@ export function Navbar() {
     { label: 'IHC Chronicles', href: '/#ihc' },
     { label: 'Resource Bank', href: '/#resources' },
   ];
+
+  const handleNavLinkClick = (e, item) => {
+    if (item.label === 'IHC Chronicles') {
+      e.preventDefault();
+      const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+      if (isLoggedIn) {
+        router.push('/articles');
+      } else {
+        router.push('/login?redirect=/articles');
+      }
+    }
+  };
 
   return (
     <motion.nav
@@ -57,6 +71,7 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 whileHover={{ y: -2 }}
+                onClick={(e) => handleNavLinkClick(e, item)}
                 className="text-foreground hover:text-gold transition-colors text-sm font-medium relative group"
               >
                 {item.label}
@@ -114,7 +129,10 @@ export function Navbar() {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.1 }}
                     className="block px-3 py-3 text-foreground hover:bg-card rounded-lg transition-colors font-medium"
-                    onClick={() => setIsOpen(false)}
+                    onClick={(e) => {
+                      setIsOpen(false);
+                      handleNavLinkClick(e, item);
+                    }}
                   >
                     {item.label}
                   </motion.a>
