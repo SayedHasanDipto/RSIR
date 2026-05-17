@@ -100,7 +100,7 @@ export function Footer() {
                 <div className="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-gold">
                   <Envelope className="w-4 h-4" />
                 </div>
-                <a href="mailto:info@robiulislam.com" className="text-white/60 hover:text-gold transition-colors text-sm font-medium">
+                <a href="mailto:robiul240du@gmail.com" className="text-white/60 hover:text-gold transition-colors text-sm font-medium">
                   robiul240du@gmail.com
                 </a>
               </li>
@@ -108,7 +108,7 @@ export function Footer() {
                 <div className="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-gold">
                   <Handset className="w-4 h-4" />
                 </div>
-                <a href="tel:+1234567890" className="text-white/60 hover:text-gold transition-colors text-sm font-medium">
+                <a href="tel:+8801913778536" className="text-white/60 hover:text-gold transition-colors text-sm font-medium">
                   +880 19137 78536
                 </a>
               </li>
@@ -127,7 +127,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-white/40 text-sm font-medium">
-            &copy; 2024 Robiul Islam. All rights reserved. Designed for Excellence.
+            &copy; 2026 Robiul Islam. All rights reserved. Designed for Excellence.
           </p>
 
           <div className="flex gap-8 text-xs font-bold uppercase tracking-widest text-white/40">
