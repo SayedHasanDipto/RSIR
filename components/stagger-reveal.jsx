@@ -22,7 +22,8 @@ export function StaggerReveal({
     const container = containerRef.current;
     if (!container) return;
 
-    const elements = container.querySelectorAll(selector);
+    const querySelector = selector.startsWith('>') ? `:scope ${selector}` : selector;
+    const elements = container.querySelectorAll(querySelector);
 
     gsap.fromTo(
       elements,
