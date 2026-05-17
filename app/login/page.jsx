@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Github, Chrome as Google } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Github, Chrome as Google, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +12,36 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Facebook } from 'lucide-react';
 
 export default function LoginPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!email.trim() || !password.trim()) {
+      setError('দয়া করে আপনার ইমেইল এবং পাসওয়ার্ডটি টাইপ করুন!');
+      return;
+    }
+
+    setLoading(true);
+
+    // Simulated API lag for premium feel
+    setTimeout(() => {
+      localStorage.setItem('userLoggedIn', 'true');
+      setLoading(false);
+      
+      // Redirect back to the requested page or to home
+      const redirectUrl = searchParams.get('redirect') || '/';
+      router.push(redirectUrl);
+    }, 1000);
+  };
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-[#0f1a35]">
       {/* Premium Background Elements */}
@@ -51,76 +83,98 @@ export default function LoginPage() {
         </div>
 
         <Card className="border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl overflow-hidden">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center text-white">Login</CardTitle>
-            <CardDescription className="text-center text-white/40">
-              Enter your credentials to access your dashboard
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="border-white/10 bg-white/5 text-white hover:bg-white/10 transition-all gap-2">
-                <Google className="w-4 h-4" />
-                Google
-              </Button>
-              <Button variant="outline" className="border-white/10 bg-white/5 text-white hover:bg-white/10 transition-all gap-2">
-                <Facebook className="w-4 h-4" />
-                Facebook
-              </Button>
-            </div>
+          <form onSubmit={handleLogin}>
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl text-center text-white">Login</CardTitle>
+              <CardDescription className="text-center text-white/40">
+                Enter your credentials to access your dashboard
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+              {/* Error Message */}
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="bg-red-500/10 border border-red-500/20 text-red-200 px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-semibold"
+                >
+                  <AlertCircle className="w-5 h-5 shrink-0" />
+                  <span>{error}</span>
+                </motion.div>
+              )}
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-white/10" />
+              <div className="grid grid-cols-2 gap-4">
+                <Button type="button" variant="outline" className="border-white/10 bg-white/5 text-white hover:bg-white/10 transition-all gap-2">
+                  <Google className="w-4 h-4" />
+                  Google
+                </Button>
+                <Button type="button" variant="outline" className="border-white/10 bg-white/5 text-white hover:bg-white/10 transition-all gap-2">
+                  <Facebook className="w-4 h-4" />
+                  Facebook
+                </Button>
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-[#1a2f5a] px-2 text-white/40">Or continue with</span>
-              </div>
-            </div>
 
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="email" className="text-white/80 font-medium">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:ring-gold/50 focus:border-gold transition-all"
-                  />
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-white/10" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-[#1a2f5a] px-2 text-white/40">Or continue with</span>
                 </div>
               </div>
-              <div className="grid gap-2">
-                <div className="flex justify-between items-center">
-                  <Label htmlFor="password" className="text-white/80 font-medium">Password</Label>
-                  <Link href="#" className="text-xs text-gold hover:text-gold-light transition-colors">
-                    Forgot password?
-                  </Link>
+
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="email" className="text-white/80 font-medium">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="name@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:ring-gold/50 focus:border-gold transition-all"
+                    />
+                  </div>
                 </div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-                  <Input
-                    id="password"
-                    type="password"
-                    className="pl-10 bg-white/5 border-white/10 text-white focus:ring-gold/50 focus:border-gold transition-all"
-                  />
+                <div className="grid gap-2">
+                  <div className="flex justify-between items-center">
+                    <Label htmlFor="password" className="text-white/80 font-medium">Password</Label>
+                    <Link href="#" className="text-xs text-gold hover:text-gold-light transition-colors">
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="pl-10 bg-white/5 border-white/10 text-white focus:ring-gold/50 focus:border-gold transition-all"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-4">
-            <Button className="w-full bg-gold hover:bg-gold-light text-primary-navy font-bold py-6 rounded-xl transition-all shadow-xl shadow-gold/10 group">
-              Login to Account
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <p className="text-center text-sm text-white/40">
-              Don't have an account?{" "}
-              <Link href="/signup" className="text-gold hover:text-gold-light font-medium transition-colors">
-                Sign up
-              </Link>
-            </p>
-          </CardFooter>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4">
+              <Button 
+                type="submit" 
+                disabled={loading}
+                className="w-full bg-gold hover:bg-gold-light text-primary-navy font-extrabold py-6 rounded-xl transition-all shadow-xl shadow-gold/10 group disabled:opacity-50"
+              >
+                {loading ? 'লগইন হচ্ছে...' : 'Login to Account'}
+                {!loading && <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />}
+              </Button>
+              <p className="text-center text-sm text-white/40">
+                Don't have an account?{" "}
+                <Link href="/signup" className="text-gold hover:text-gold-light font-medium transition-colors">
+                  Sign up
+                </Link>
+              </p>
+            </CardFooter>
+          </form>
         </Card>
       </motion.div>
     </div>

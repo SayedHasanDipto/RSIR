@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   BookOpen,
@@ -12,7 +13,8 @@ import {
   Globe,
   Sparkles,
   X,
-  BookMarked
+  BookMarked,
+  Lock
 } from 'lucide-react';
 import Image from 'next/image';
 import { RevealAnimation } from './reveal-animation';
@@ -125,8 +127,22 @@ const articles = [
 ];
 
 export function IhcChronicles() {
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [showAuthWall, setShowAuthWall] = useState(false);
+  const [targetRedirectUrl, setTargetRedirectUrl] = useState('');
+
+  const handleArticleAccess = (articleId) => {
+    const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+    if (isLoggedIn) {
+      router.push(`/articles/${articleId}`);
+    } else {
+      setTargetRedirectUrl(`/articles/${articleId}`);
+      setSelectedArticle(null);
+      setShowAuthWall(true);
+    }
+  };
 
   const filteredArticles = activeCategory === 'all'
     ? articles
@@ -353,12 +369,79 @@ export function IhcChronicles() {
                 >
                   বন্ধ করুন
                 </button>
-                <Link href={`/articles/${selectedArticle.id}`}>
-                  <button className="px-6 py-2.5 bg-gold hover:bg-gold-light text-primary-navy font-extrabold rounded-xl shadow-md transition-all flex items-center gap-1.5 text-sm">
-                    পূর্ণাঙ্গ আর্টিকেল দেখুন
-                    <ArrowRight className="w-4 h-4" />
+                <button
+                  onClick={() => handleArticleAccess(selectedArticle.id)}
+                  className="px-6 py-2.5 bg-gold hover:bg-gold-light text-primary-navy font-extrabold rounded-xl shadow-md transition-all flex items-center gap-1.5 text-sm"
+                >
+                  পূর্ণাঙ্গ আর্টিকেল দেখুন
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* AUTHENTICATION WALL MODAL */}
+      <AnimatePresence>
+        {showAuthWall && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10">
+            {/* Dark glass backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAuthWall(false)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-md"
+            />
+
+            {/* Modal Card content */}
+            <motion.div
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 30, scale: 0.95 }}
+              transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
+              className="bg-[#0e1626] border border-white/10 rounded-3xl w-full max-w-md p-6 sm:p-8 relative z-10 shadow-2xl text-center flex flex-col items-center"
+            >
+              {/* Icon */}
+              <div className="w-16 h-16 rounded-2xl bg-gold/10 border border-gold/20 flex items-center justify-center text-gold mb-6 shadow-inner animate-pulse">
+                <Lock className="w-8 h-8" />
+              </div>
+
+              {/* Headings */}
+              <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">
+                লগইন প্রয়োজন 🔐
+              </h3>
+              <h4 className="text-gold/90 font-bold text-sm mb-4">
+                Login Required
+              </h4>
+
+              {/* Description */}
+              <p className="text-white/60 text-sm leading-relaxed mb-6 font-medium px-2">
+                এই গবেষণাধর্মী আর্টিকেলটি সম্পূর্ণ পড়তে অনুগ্রহ করে প্রথমে আপনার অ্যাকাউন্টে লগইন করুন। এটি শিক্ষার্থীদের জন্য একটি বিশেষ সুযোগ!
+              </p>
+
+              {/* Actions */}
+              <div className="w-full flex flex-col gap-3">
+                <Link href={`/login?redirect=${encodeURIComponent(targetRedirectUrl)}`} className="w-full">
+                  <button className="w-full py-3.5 bg-gold hover:bg-gold-light text-primary-navy font-extrabold rounded-xl shadow-lg shadow-gold/10 hover:shadow-gold/25 transition-all flex items-center justify-center gap-2 text-sm">
+                    লগইন করুন (Login Now)
+                    <ArrowRight className="w-4.5 h-4.5" />
                   </button>
                 </Link>
+                
+                <Link href="/signup" className="w-full">
+                  <button className="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold rounded-xl text-sm transition-all">
+                    নতুন অ্যাকাউন্ট তৈরি করুন (Register)
+                  </button>
+                </Link>
+
+                <button
+                  onClick={() => setShowAuthWall(false)}
+                  className="w-full py-2.5 text-white/50 hover:text-white/80 font-bold text-xs transition-all tracking-wider uppercase mt-2"
+                >
+                  ফিরে যান (Go Back)
+                </button>
               </div>
             </motion.div>
           </div>
