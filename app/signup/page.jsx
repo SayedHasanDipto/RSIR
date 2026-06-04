@@ -1,14 +1,76 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Chrome as Google, Facebook, User, ShieldCheck } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Chrome as Google, Facebook, User, ShieldCheck, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { authClient } from '@/lib/auth-client';
 
 export default function SignupPage() {
+  const router = useRouter();
+  
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      setError('দয়া করে সবকয়টি তথ্য প্রদান করুন!');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('পাসওয়ার্ড দুটি মেলেনি!');
+      return;
+    }
+
+    await authClient.signUp.email({
+      email,
+      password,
+      name,
+    }, {
+      onRequest: () => {
+        setLoading(true);
+      },
+      onSuccess: () => {
+        setLoading(false);
+        localStorage.setItem('userLoggedIn', 'true');
+        router.push('/');
+      },
+      onError: (ctx) => {
+        setLoading(false);
+        setError(ctx.error.message || 'নিবন্ধন করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।');
+      }
+    });
+  };
+
+  const handleSocialLogin = async (provider) => {
+    setError('');
+    await authClient.signIn.social({
+      provider,
+      callbackURL: '/',
+    }, {
+      onRequest: () => {
+        setLoading(true);
+      },
+      onError: (ctx) => {
+        setLoading(false);
+        setError(ctx.error.message || `${provider === 'google' ? 'Google' : 'Facebook'} লগইন করতে সমস্যা হয়েছে।`);
+      }
+    });
+  };
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-[#0f1a35] py-12">
       {/* Premium Background Elements */}
@@ -49,94 +111,138 @@ export default function SignupPage() {
           <p className="text-white/60">Join our community of elite learners</p>
         </div>
 
-        <Card className="border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl overflow-hidden">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center text-white">Sign Up</CardTitle>
-            <CardDescription className="text-center text-white/40">
-              Start your journey with Robiul Islam today
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="border-white/10 bg-white/5 text-white hover:bg-white/10 transition-all gap-2">
-                <Google className="w-4 h-4" />
-                Google
-              </Button>
-              <Button variant="outline" className="border-white/10 bg-white/5 text-white hover:bg-white/10 transition-all gap-2">
-                <Facebook className="w-4 h-4" />
-                Facebook
-              </Button>
-            </div>
-            
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-white/10" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-[#1a2f5a] px-2 text-white/40">Or register with</span>
-              </div>
-            </div>
+        <Card className="border border-gold/15 bg-gradient-to-br from-[#0b152e] to-[#050c1e] backdrop-blur-xl shadow-[0_20px_50px_rgba(212,175,55,0.08)] overflow-hidden p-2">
+          <form onSubmit={handleSignup}>
+            <CardHeader className="space-y-1 pb-4">
+              <CardTitle className="text-2xl text-center font-bold text-white tracking-wide">Sign Up</CardTitle>
+              <CardDescription className="text-center text-white/50 text-xs">
+                Start your premium learning journey today
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-5">
+              {/* Error Message */}
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="bg-red-500/10 border border-red-500/20 text-red-200 px-4 py-3 rounded-xl flex items-center gap-3 text-xs font-semibold"
+                >
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                  <span>{error}</span>
+                </motion.div>
+              )}
 
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name" className="text-white/80 font-medium">Full Name</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-                  <Input 
-                    id="name" 
-                    placeholder="John Doe" 
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:ring-gold/50 focus:border-gold transition-all"
-                  />
+              <div className="grid grid-cols-2 gap-3">
+                <Button 
+                  type="button" 
+                  onClick={() => handleSocialLogin('google')}
+                  variant="outline" 
+                  className="border-white/5 bg-white/[0.02] text-white/80 hover:bg-white/[0.08] hover:text-white transition-all gap-2 text-xs h-11 rounded-xl cursor-pointer"
+                  disabled={loading}
+                >
+                  <Google className="w-4 h-4 text-white/70" />
+                  Google
+                </Button>
+                <Button 
+                  type="button" 
+                  onClick={() => handleSocialLogin('facebook')}
+                  variant="outline" 
+                  className="border-white/5 bg-white/[0.02] text-white/80 hover:bg-white/[0.08] hover:text-white transition-all gap-2 text-xs h-11 rounded-xl cursor-pointer"
+                  disabled={loading}
+                >
+                  <Facebook className="w-4 h-4 text-blue-400" />
+                  Facebook
+                </Button>
+              </div>
+              
+              <div className="relative my-1">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-white/5" />
+                </div>
+                <div className="relative flex justify-center text-[10px] uppercase tracking-widest">
+                  <span className="bg-[#0b152e] px-3 text-white/30 font-semibold">Or register with</span>
                 </div>
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="email" className="text-white/80 font-medium">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-                  <Input 
-                    id="email" 
-                    type="email" 
-                    placeholder="name@example.com" 
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:ring-gold/50 focus:border-gold transition-all"
-                  />
+
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="name" className="text-white/70 text-xs font-semibold tracking-wide">Full Name</Label>
+                  <div className="relative">
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                    <Input 
+                      id="name" 
+                      placeholder="John Doe" 
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="pl-11 bg-white/[0.02] border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus-visible:ring-gold/30 focus-visible:border-gold focus-visible:ring-[3px] transition-all duration-300"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="email" className="text-white/70 text-xs font-semibold tracking-wide">Email Address</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      placeholder="name@example.com" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-11 bg-white/[0.02] border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus-visible:ring-gold/30 focus-visible:border-gold focus-visible:ring-[3px] transition-all duration-300"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="password" className="text-white/70 text-xs font-semibold tracking-wide">Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                    <Input 
+                      id="password" 
+                      type="password" 
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="pl-11 bg-white/[0.02] border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus-visible:ring-gold/30 focus-visible:border-gold focus-visible:ring-[3px] transition-all duration-300"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="confirm-password" className="text-white/70 text-xs font-semibold tracking-wide">Confirm Password</Label>
+                  <div className="relative">
+                    <ShieldCheck className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                    <Input 
+                      id="confirm-password" 
+                      type="password" 
+                      placeholder="••••••••"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="pl-11 bg-white/[0.02] border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus-visible:ring-gold/30 focus-visible:border-gold focus-visible:ring-[3px] transition-all duration-300"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password" className="text-white/80 font-medium">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-                  <Input 
-                    id="password" 
-                    type="password" 
-                    className="pl-10 bg-white/5 border-white/10 text-white focus:ring-gold/50 focus:border-gold transition-all"
-                  />
-                </div>
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="confirm-password" className="text-white/80 font-medium">Confirm Password</Label>
-                <div className="relative">
-                  <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-                  <Input 
-                    id="confirm-password" 
-                    type="password" 
-                    className="pl-10 bg-white/5 border-white/10 text-white focus:ring-gold/50 focus:border-gold transition-all"
-                  />
-                </div>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-4">
-            <Button className="w-full bg-gold hover:bg-gold-light text-primary-navy font-bold py-6 rounded-xl transition-all shadow-xl shadow-gold/10 group">
-              Create Account
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <p className="text-center text-sm text-white/40">
-              Already have an account?{" "}
-              <Link href="/login" className="text-gold hover:text-gold-light font-medium transition-colors">
-                Login
-              </Link>
-            </p>
-          </CardFooter>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4 pt-6 pb-4">
+              <Button 
+                type="submit" 
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-primary-navy font-bold h-12 rounded-xl transition-all shadow-lg shadow-gold/10 group disabled:opacity-50 cursor-pointer"
+              >
+                {loading ? 'Registering...' : 'Create Premium Account'}
+                {!loading && <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />}
+              </Button>
+              <p className="text-center text-xs text-white/40">
+                Already have an account?{" "}
+                <Link href="/login" className="text-gold hover:text-gold-light font-semibold transition-colors">
+                  Login
+                </Link>
+              </p>
+            </CardFooter>
+          </form>
         </Card>
       </motion.div>
     </div>

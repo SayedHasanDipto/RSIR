@@ -18,8 +18,8 @@ export function HeroSection() {
 
     const words = headlineRef.current.innerText.split(' ');
     headlineRef.current.innerHTML = words
-      .map(word => `<span class="inline-block opacity-0 translate-y-10">${word}&nbsp;</span>`)
-      .join('');
+      .map(word => `<span class="inline-block opacity-0 translate-y-10">${word}</span>`)
+      .join(' ');
 
     gsap.to(headlineRef.current.querySelectorAll('span'), {
       opacity: 1,

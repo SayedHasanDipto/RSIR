@@ -12,6 +12,7 @@ const nextConfig = {
     ],
     formats: ['image/avif', 'image/webp'],
   },
+  serverExternalPackages: ['better-auth'],
 }
 
 export default nextConfig
