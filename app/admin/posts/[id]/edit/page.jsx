@@ -3,52 +3,51 @@
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Save, FileDown } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 
-export default function EditResourcePage({ params }) {
+export default function EditPostPage({ params }) {
   const { id } = use(params);
   const router = useRouter();
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     title: '',
-    description: '',
+    excerpt: '',
+    content: '',
     category: 'General',
-    fileUrl: '',
-    fileSize: 0,
+    thumbnailUrl: '',
     status: 'published',
   });
 
   useEffect(() => {
-    fetchResource();
+    fetchPost();
   }, [id]);
 
-  const fetchResource = async () => {
+  const fetchPost = async () => {
     try {
-      const res = await fetch(`/api/admin/resources/${id}`);
+      const res = await fetch(`/api/admin/posts/${id}`);
       if (res.ok) {
         const data = await res.json();
-        const r = data.resource;
+        const post = data.post;
         setForm({
-          title: r.title || '',
-          description: r.description || '',
-          category: r.category || 'General',
-          fileUrl: r.fileUrl || '',
-          fileSize: r.fileSize || 0,
-          status: r.status || 'published',
+          title: post.title || '',
+          excerpt: post.excerpt || '',
+          content: post.content || '',
+          category: post.category || 'General',
+          thumbnailUrl: post.thumbnailUrl || '',
+          status: post.status || 'published',
         });
       } else {
-        toast.error('Resource not found');
-        router.push('/admin/resources');
+        toast.error('Post not found');
+        router.push('/admin/posts');
       }
     } catch {
-      toast.error('Failed to load resource');
+      toast.error('Failed to load post');
     } finally {
       setLoading(false);
     }
@@ -67,18 +66,18 @@ export default function EditResourcePage({ params }) {
 
     setSaving(true);
     try {
-      const res = await fetch(`/api/admin/resources/${id}`, {
+      const res = await fetch(`/api/admin/posts/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
 
       if (res.ok) {
-        toast.success('Resource updated successfully!');
-        router.push('/admin/resources');
+        toast.success('Post updated successfully!');
+        router.push('/admin/posts');
       } else {
         const data = await res.json();
-        toast.error(data.error || 'Failed to update resource');
+        toast.error(data.error || 'Failed to update post');
       }
     } catch {
       toast.error('Something went wrong');
@@ -87,15 +86,14 @@ export default function EditResourcePage({ params }) {
     }
   };
 
-  const handleFileUpload = async (e) => {
+  const handleThumbnailUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('type', 'pdf');
+    formData.append('type', 'thumbnail');
 
-    setUploading(true);
     try {
       const res = await fetch('/api/admin/upload', {
         method: 'POST',
@@ -103,17 +101,13 @@ export default function EditResourcePage({ params }) {
       });
       if (res.ok) {
         const data = await res.json();
-        updateField('fileUrl', data.url);
-        updateField('fileSize', data.size);
-        toast.success('File uploaded successfully');
+        updateField('thumbnailUrl', data.url);
+        toast.success('Thumbnail uploaded');
       } else {
-        const err = await res.json();
-        toast.error(err.error || 'Failed to upload file');
+        toast.error('Failed to upload thumbnail');
       }
     } catch {
       toast.error('Upload failed');
-    } finally {
-      setUploading(false);
     }
   };
 
@@ -129,7 +123,7 @@ export default function EditResourcePage({ params }) {
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/admin/resources">
+        <Link href="/admin/posts">
           <button className="p-2 rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-white/20 transition-all">
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -140,9 +134,9 @@ export default function EditResourcePage({ params }) {
             animate={{ opacity: 1, y: 0 }}
             className="text-2xl font-bold text-white"
           >
-            Edit Resource
+            Edit Post
           </motion.h1>
-          <p className="text-white/40 text-sm">Update resource details and file</p>
+          <p className="text-white/40 text-sm">Update post content and settings</p>
         </div>
       </div>
 
@@ -154,25 +148,25 @@ export default function EditResourcePage({ params }) {
           transition={{ delay: 0.1 }}
           className="rounded-2xl border border-white/5 bg-white/[0.02] p-6 space-y-5"
         >
-          <h2 className="text-lg font-semibold text-white/80 mb-4">Resource Details</h2>
+          <h2 className="text-lg font-semibold text-white/80 mb-4">Post Details</h2>
 
           <div className="space-y-2">
             <Label className="text-white/80 font-medium">Title *</Label>
             <Input
               value={form.title}
               onChange={(e) => updateField('title', e.target.value)}
-              placeholder="e.g. Grammar Reference Guide"
+              placeholder="e.g. How to Master English Grammar"
               className="bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:ring-gold/50 focus:border-gold"
             />
           </div>
 
           <div className="space-y-2">
-            <Label className="text-white/80 font-medium">Description</Label>
+            <Label className="text-white/80 font-medium">Excerpt / Summary</Label>
             <textarea
-              value={form.description}
-              onChange={(e) => updateField('description', e.target.value)}
-              placeholder="Brief description of the resource..."
-              rows={3}
+              value={form.excerpt}
+              onChange={(e) => updateField('excerpt', e.target.value)}
+              placeholder="A short summary of the post..."
+              rows={2}
               className="w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/20 focus:ring-gold/50 focus:border-gold outline-none resize-none"
             />
           </div>
@@ -187,35 +181,39 @@ export default function EditResourcePage({ params }) {
               <option value="General" className="bg-[#060d1f]">General</option>
               <option value="English Hub" className="bg-[#060d1f]">English Hub</option>
               <option value="IHC Chronicles" className="bg-[#060d1f]">IHC Chronicles</option>
-              <option value="Grammar" className="bg-[#060d1f]">Grammar</option>
-              <option value="Vocabulary" className="bg-[#060d1f]">Vocabulary</option>
-              <option value="Practice Tests" className="bg-[#060d1f]">Practice Tests</option>
+              <option value="Announcement" className="bg-[#060d1f]">Announcement</option>
+              <option value="Tips & Tricks" className="bg-[#060d1f]">Tips & Tricks</option>
             </select>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-white/80 font-medium">Content</Label>
+            <textarea
+              value={form.content}
+              onChange={(e) => updateField('content', e.target.value)}
+              placeholder="Write your post content here..."
+              rows={12}
+              className="w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/20 focus:ring-gold/50 focus:border-gold outline-none resize-none"
+            />
           </div>
         </motion.div>
 
-        {/* File */}
+        {/* Thumbnail */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="rounded-2xl border border-white/5 bg-white/[0.02] p-6 space-y-5"
         >
-          <h2 className="text-lg font-semibold text-white/80 mb-4">File</h2>
+          <h2 className="text-lg font-semibold text-white/80 mb-4">Featured Image</h2>
 
-          {form.fileUrl && (
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
-              <FileDown className="w-5 h-5 text-emerald-400 shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-emerald-400 truncate">{form.fileUrl}</p>
-                {form.fileSize > 0 && (
-                  <p className="text-xs text-white/30 mt-0.5">{(form.fileSize / 1024).toFixed(1)} KB</p>
-                )}
-              </div>
+          {form.thumbnailUrl && (
+            <div className="relative w-full max-w-md aspect-video rounded-xl overflow-hidden border border-white/10 mb-4">
+              <img src={form.thumbnailUrl} alt="Thumbnail preview" className="w-full h-full object-cover" />
               <button
                 type="button"
-                onClick={() => { updateField('fileUrl', ''); updateField('fileSize', 0); }}
-                className="text-white/30 hover:text-white transition-colors text-lg leading-none"
+                onClick={() => updateField('thumbnailUrl', '')}
+                className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white/70 hover:text-white transition-colors"
               >
                 ×
               </button>
@@ -223,29 +221,20 @@ export default function EditResourcePage({ params }) {
           )}
 
           <div className="space-y-2">
-            <Label className="text-white/80 font-medium">Replace File (PDF)</Label>
-            <div className="relative">
-              <input
-                type="file"
-                accept="application/pdf"
-                onChange={handleFileUpload}
-                disabled={uploading}
-                className="block w-full text-sm text-white/40 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-gold/10 file:text-gold hover:file:bg-gold/20 file:cursor-pointer disabled:opacity-50"
-              />
-              {uploading && (
-                <div className="flex items-center gap-2 mt-2 text-xs text-white/40">
-                  <div className="w-3 h-3 border border-gold/30 border-t-gold rounded-full animate-spin" />
-                  Uploading...
-                </div>
-              )}
-            </div>
+            <Label className="text-white/80 font-medium">Upload Image</Label>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handleThumbnailUpload}
+              className="block w-full text-sm text-white/40 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-gold/10 file:text-gold hover:file:bg-gold/20 file:cursor-pointer"
+            />
           </div>
 
-          <div className="text-xs text-white/30">Or paste a file URL directly:</div>
+          <div className="text-xs text-white/30">Or paste an image URL directly:</div>
           <Input
-            value={form.fileUrl}
-            onChange={(e) => updateField('fileUrl', e.target.value)}
-            placeholder="https://drive.google.com/..."
+            value={form.thumbnailUrl}
+            onChange={(e) => updateField('thumbnailUrl', e.target.value)}
+            placeholder="https://..."
             className="bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:ring-gold/50 focus:border-gold"
           />
         </motion.div>
@@ -281,11 +270,11 @@ export default function EditResourcePage({ params }) {
             </div>
             <Button
               type="submit"
-              disabled={saving || uploading}
+              disabled={saving}
               className="bg-gold hover:bg-gold-light text-primary-navy font-bold gap-2 px-8 py-6 shadow-lg shadow-gold/10 disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
-              {saving ? 'Saving...' : 'Update Resource'}
+              {saving ? 'Saving...' : 'Update Post'}
             </Button>
           </div>
         </motion.div>

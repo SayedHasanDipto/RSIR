@@ -3,13 +3,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { FolderDown, Plus, Pencil, Trash2, FileDown } from 'lucide-react';
+import { FileText, Plus, Pencil, Trash2, Clock } from 'lucide-react';
 import { DataTable } from '@/components/admin/data-table';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
-export default function ResourcesPage() {
-  const [resources, setResources] = useState([]);
+export default function AdminPostsPage() {
+  const [posts, setPosts] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -17,52 +17,52 @@ export default function ResourcesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchTimeout, setSearchTimeout] = useState(null);
 
-  const fetchResources = useCallback(async (p = page, search = searchQuery) => {
+  const fetchPosts = useCallback(async (p = page, search = searchQuery) => {
     setLoading(true);
     try {
       const params = new URLSearchParams({ page: p.toString(), limit: '15' });
       if (search) params.set('search', search);
 
-      const res = await fetch(`/api/admin/resources?${params}`);
+      const res = await fetch(`/api/admin/posts?${params}`);
       if (res.ok) {
         const data = await res.json();
-        setResources(data.resources || []);
-        setTotal(data.total || 0);
-        setTotalPages(data.totalPages || 1);
+        setPosts(data.posts);
+        setTotal(data.total);
+        setTotalPages(data.totalPages);
       }
     } catch (error) {
-      toast.error('Failed to load resources');
+      toast.error('Failed to load posts');
     } finally {
       setLoading(false);
     }
   }, [page, searchQuery]);
 
   useEffect(() => {
-    fetchResources();
-  }, [fetchResources]);
+    fetchPosts();
+  }, [fetchPosts]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
     if (searchTimeout) clearTimeout(searchTimeout);
     const timeout = setTimeout(() => {
       setPage(1);
-      fetchResources(1, query);
+      fetchPosts(1, query);
     }, 400);
     setSearchTimeout(timeout);
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this resource?')) return;
+    if (!confirm('Are you sure you want to delete this post?')) return;
     try {
-      const res = await fetch(`/api/admin/resources/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/posts/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        toast.success('Resource deleted successfully');
-        fetchResources();
+        toast.success('Post deleted successfully');
+        fetchPosts();
       } else {
-        toast.error('Failed to delete resource');
+        toast.error('Failed to delete post');
       }
     } catch {
-      toast.error('Failed to delete resource');
+      toast.error('Failed to delete post');
     }
   };
 
@@ -72,12 +72,12 @@ export default function ResourcesPage() {
       label: 'Title',
       render: (val, row) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500/20 to-green-500/20 flex items-center justify-center shrink-0">
-            <FileDown className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center shrink-0">
+            <FileText className="w-3.5 h-3.5 text-blue-400" />
           </div>
           <div className="min-w-0">
             <p className="text-white/90 font-medium truncate max-w-[280px]">{val}</p>
-            <p className="text-xs text-white/30 truncate max-w-[280px]">{row.description || '—'}</p>
+            <p className="text-xs text-white/30 truncate max-w-[280px]">{row.excerpt || row.slug}</p>
           </div>
         </div>
       ),
@@ -86,29 +86,17 @@ export default function ResourcesPage() {
       key: 'category',
       label: 'Category',
       render: (val) => (
-        <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-emerald-500/10 text-emerald-400">
+        <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-purple-500/10 text-purple-400">
           {val || 'General'}
         </span>
       ),
     },
     {
-      key: 'fileUrl',
-      label: 'File',
-      render: (val) =>
-        val ? (
-          <a
-            href={val}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="text-xs text-gold hover:text-gold-light flex items-center gap-1 transition-colors"
-          >
-            <FileDown className="w-3 h-3" />
-            View File
-          </a>
-        ) : (
-          <span className="text-xs text-white/20">No file</span>
-        ),
+      key: 'author',
+      label: 'Author',
+      render: (val) => (
+        <span className="text-xs text-white/50">{val || '—'}</span>
+      ),
     },
     {
       key: 'status',
@@ -127,7 +115,8 @@ export default function ResourcesPage() {
       key: 'createdAt',
       label: 'Date',
       render: (val) => (
-        <span className="text-xs text-white/30">
+        <span className="text-xs text-white/30 flex items-center gap-1">
+          <Clock className="w-3 h-3" />
           {val ? new Date(val).toLocaleDateString() : '—'}
         </span>
       ),
@@ -144,14 +133,14 @@ export default function ResourcesPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-2xl font-bold text-white"
           >
-            Resources / PDFs
+            Posts
           </motion.h1>
-          <p className="text-white/40 text-sm mt-1">Manage downloadable files and PDFs</p>
+          <p className="text-white/40 text-sm mt-1">Manage your articles and blog posts</p>
         </div>
-        <Link href="/admin/resources/new">
+        <Link href="/admin/posts/new">
           <Button className="bg-gold hover:bg-gold-light text-primary-navy font-bold gap-2 shadow-lg shadow-gold/10">
             <Plus className="w-4 h-4" />
-            Upload Resource
+            Add Post
           </Button>
         </Link>
       </div>
@@ -159,18 +148,18 @@ export default function ResourcesPage() {
       {/* Table */}
       <DataTable
         columns={columns}
-        data={resources}
+        data={posts}
         total={total}
         page={page}
         totalPages={totalPages}
-        onPageChange={(p) => { setPage(p); fetchResources(p); }}
+        onPageChange={(p) => { setPage(p); fetchPosts(p); }}
         onSearch={handleSearch}
-        searchPlaceholder="Search resources..."
-        emptyMessage="No resources uploaded yet. Add your first resource!"
-        emptyIcon={FolderDown}
+        searchPlaceholder="Search posts..."
+        emptyMessage="No posts found. Create your first post!"
+        emptyIcon={FileText}
         actions={(row) => (
           <>
-            <Link href={`/admin/resources/${row._id}/edit`}>
+            <Link href={`/admin/posts/${row._id}/edit`}>
               <button className="p-2 rounded-lg text-white/40 hover:text-gold hover:bg-gold/10 transition-all" title="Edit">
                 <Pencil className="w-4 h-4" />
               </button>
