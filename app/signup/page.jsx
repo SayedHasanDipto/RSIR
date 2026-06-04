@@ -13,7 +13,7 @@ import { authClient } from '@/lib/auth-client';
 
 export default function SignupPage() {
   const router = useRouter();
-  
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -77,7 +77,7 @@ export default function SignupPage() {
       <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px] animate-pulse" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-primary-navy-light/10 rounded-full blur-[120px]" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.05)_0%,transparent_70%)]" />
-      
+
       {/* Back to Home Button */}
       <div className="absolute top-8 left-8 z-20">
         <Link href="/">
@@ -89,8 +89,8 @@ export default function SignupPage() {
       </div>
 
       {/* Animated Lines/Grid for Sophistication */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -100,7 +100,7 @@ export default function SignupPage() {
       >
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 group mb-4">
-            <motion.div 
+            <motion.div
               whileHover={{ rotate: 5, scale: 1.05 }}
               className="w-12 h-12 bg-gradient-to-br from-gold to-gold-dark rounded-xl flex items-center justify-center shadow-2xl shadow-gold/20"
             >
@@ -133,28 +133,18 @@ export default function SignupPage() {
               )}
 
               <div className="grid grid-cols-2 gap-3">
-                <Button 
-                  type="button" 
+                <Button
+                  type="button"
                   onClick={() => handleSocialLogin('google')}
-                  variant="outline" 
+                  variant="outline"
                   className="border-white/5 bg-white/[0.02] text-white/80 hover:bg-white/[0.08] hover:text-white transition-all gap-2 text-xs h-11 rounded-xl cursor-pointer"
                   disabled={loading}
                 >
                   <Google className="w-4 h-4 text-white/70" />
                   Google
                 </Button>
-                <Button 
-                  type="button" 
-                  onClick={() => handleSocialLogin('facebook')}
-                  variant="outline" 
-                  className="border-white/5 bg-white/[0.02] text-white/80 hover:bg-white/[0.08] hover:text-white transition-all gap-2 text-xs h-11 rounded-xl cursor-pointer"
-                  disabled={loading}
-                >
-                  <Facebook className="w-4 h-4 text-blue-400" />
-                  Facebook
-                </Button>
               </div>
-              
+
               <div className="relative my-1">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t border-white/5" />
@@ -169,9 +159,9 @@ export default function SignupPage() {
                   <Label htmlFor="name" className="text-white/70 text-xs font-semibold tracking-wide">Full Name</Label>
                   <div className="relative">
                     <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                    <Input 
-                      id="name" 
-                      placeholder="John Doe" 
+                    <Input
+                      id="name"
+                      placeholder="John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="pl-11 bg-white/[0.02] border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus-visible:ring-gold/30 focus-visible:border-gold focus-visible:ring-[3px] transition-all duration-300"
@@ -183,10 +173,10 @@ export default function SignupPage() {
                   <Label htmlFor="email" className="text-white/70 text-xs font-semibold tracking-wide">Email Address</Label>
                   <div className="relative">
                     <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      placeholder="name@example.com" 
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="name@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="pl-11 bg-white/[0.02] border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus-visible:ring-gold/30 focus-visible:border-gold focus-visible:ring-[3px] transition-all duration-300"
@@ -198,9 +188,9 @@ export default function SignupPage() {
                   <Label htmlFor="password" className="text-white/70 text-xs font-semibold tracking-wide">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                    <Input 
-                      id="password" 
-                      type="password" 
+                    <Input
+                      id="password"
+                      type="password"
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -213,9 +203,9 @@ export default function SignupPage() {
                   <Label htmlFor="confirm-password" className="text-white/70 text-xs font-semibold tracking-wide">Confirm Password</Label>
                   <div className="relative">
                     <ShieldCheck className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                    <Input 
-                      id="confirm-password" 
-                      type="password" 
+                    <Input
+                      id="confirm-password"
+                      type="password"
                       placeholder="••••••••"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
@@ -227,8 +217,8 @@ export default function SignupPage() {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4 pt-6 pb-4">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-primary-navy font-bold h-12 rounded-xl transition-all shadow-lg shadow-gold/10 group disabled:opacity-50 cursor-pointer"
               >

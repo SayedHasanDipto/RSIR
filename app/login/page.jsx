@@ -15,7 +15,7 @@ import { authClient } from '@/lib/auth-client';
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -130,25 +130,15 @@ export default function LoginPage() {
               )}
 
               <div className="grid grid-cols-2 gap-3">
-                <Button 
-                  type="button" 
+                <Button
+                  type="button"
                   onClick={() => handleSocialLogin('google')}
-                  variant="outline" 
+                  variant="outline"
                   className="border-white/5 bg-white/[0.02] text-white/80 hover:bg-white/[0.08] hover:text-white transition-all gap-2 text-xs h-11 rounded-xl cursor-pointer"
                   disabled={loading}
                 >
                   <Google className="w-4 h-4 text-white/70" />
                   Google
-                </Button>
-                <Button 
-                  type="button" 
-                  onClick={() => handleSocialLogin('facebook')}
-                  variant="outline" 
-                  className="border-white/5 bg-white/[0.02] text-white/80 hover:bg-white/[0.08] hover:text-white transition-all gap-2 text-xs h-11 rounded-xl cursor-pointer"
-                  disabled={loading}
-                >
-                  <Facebook className="w-4 h-4 text-blue-400" />
-                  Facebook
                 </Button>
               </div>
 
@@ -198,8 +188,8 @@ export default function LoginPage() {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4 pt-6 pb-4">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-primary-navy font-bold h-12 rounded-xl transition-all shadow-lg shadow-gold/10 group disabled:opacity-50 cursor-pointer"
               >
