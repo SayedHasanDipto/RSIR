@@ -1,14 +1,16 @@
-'use client';
-
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Play, Clock, Star } from 'lucide-react';
-import { lessons } from '@/lib/lessons-data';
+import Image from 'next/image';
+import { ArrowLeft, Play, Clock } from 'lucide-react';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
-import { StaggerReveal } from '@/components/stagger-reveal';
+import { getLessons } from '@/lib/content';
 
-export default function AllLessonsPage() {
+export default async function AllLessonsPage() {
+  const lessons = await getLessons();
+
+  const englishLessons = lessons.filter(l => l.category === 'English Hub');
+  const ihcLessons = lessons.filter(l => l.category === 'IHC Chronicles');
+
   return (
     <main className="min-h-screen bg-[#fafafa] pt-24">
       <Navbar />
@@ -44,13 +46,14 @@ export default function AllLessonsPage() {
               <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-sm">EN</span>
               English Hub
             </h2>
-            <StaggerReveal selector=".lesson-card">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {lessons.filter(l => l.category === 'English Hub').map((lesson) => (
-                  <LessonCard key={lesson.id} lesson={lesson} />
-                ))}
-              </div>
-            </StaggerReveal>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {englishLessons.map((lesson) => (
+                <LessonCard key={lesson._id} lesson={lesson} />
+              ))}
+              {englishLessons.length === 0 && (
+                <p className="text-foreground/40 col-span-2 text-center py-8">No English lessons yet.</p>
+              )}
+            </div>
           </div>
 
           {/* IHC Chronicles Section */}
@@ -59,13 +62,14 @@ export default function AllLessonsPage() {
               <span className="w-8 h-8 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center text-sm">IHC</span>
               IHC Chronicles
             </h2>
-            <StaggerReveal selector=".lesson-card">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {lessons.filter(l => l.category === 'IHC Chronicles').map((lesson) => (
-                  <LessonCard key={lesson.id} lesson={lesson} />
-                ))}
-              </div>
-            </StaggerReveal>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {ihcLessons.map((lesson) => (
+                <LessonCard key={lesson._id} lesson={lesson} />
+              ))}
+              {ihcLessons.length === 0 && (
+                <p className="text-foreground/40 col-span-2 text-center py-8">No IHC lessons yet.</p>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -76,19 +80,18 @@ export default function AllLessonsPage() {
 }
 
 function LessonCard({ lesson }) {
+  const thumbnailSrc = lesson.thumbnailUrl || 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80';
+
   return (
-    <Link href={`/lessons/${lesson.id}`} className="lesson-card group">
-      <motion.div
-        whileHover={{ y: -8 }}
-        className="bg-white rounded-2xl overflow-hidden border border-border/50 shadow-sm hover:shadow-xl transition-all h-full flex flex-col"
-      >
-        <div className="relative aspect-video bg-primary-navy-light flex items-center justify-center text-4xl overflow-hidden">
-          <motion.span 
-            whileHover={{ scale: 1.2, rotate: 5 }}
-            className="relative z-10 transition-transform duration-500"
-          >
-            {lesson.thumbnail}
-          </motion.span>
+    <Link href={`/lessons/${lesson._id}`} className="lesson-card group">
+      <div className="bg-white rounded-2xl overflow-hidden border border-border/50 shadow-sm hover:shadow-xl transition-all h-full flex flex-col hover:-translate-y-2 duration-300">
+        <div className="relative aspect-video bg-primary-navy-light overflow-hidden">
+          <Image
+            src={thumbnailSrc}
+            alt={lesson.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
             <Play size={40} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
@@ -96,18 +99,21 @@ function LessonCard({ lesson }) {
         <div className="p-5 flex-grow">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[10px] font-bold uppercase tracking-widest text-gold bg-gold/10 px-2 py-1 rounded">
-              {lesson.difficulty}
+              {lesson.difficulty || 'Intermediate'}
             </span>
             <div className="flex items-center gap-1 text-[10px] text-foreground/40 font-bold">
               <Clock size={12} />
-              {lesson.duration}
+              {lesson.duration || '—'}
             </div>
           </div>
           <h3 className="font-bold text-primary group-hover:text-gold transition-colors line-clamp-2">
             {lesson.title}
           </h3>
+          {lesson.description && (
+            <p className="text-xs text-foreground/50 mt-2 line-clamp-2">{lesson.description}</p>
+          )}
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 }

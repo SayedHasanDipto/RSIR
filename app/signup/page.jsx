@@ -46,7 +46,7 @@ export default function SignupPage() {
       onSuccess: () => {
         setLoading(false);
         localStorage.setItem('userLoggedIn', 'true');
-        router.push('/');
+        window.location.href = '/';
       },
       onError: (ctx) => {
         setLoading(false);

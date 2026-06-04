@@ -7,16 +7,25 @@ import { StudentFeedback } from '@/components/student-feedback';
 import { SidebarNoticeBoard } from '@/components/sidebar-notice-board';
 import { Footer } from '@/components/footer';
 
-export default function Home() {
+import { getPosts, getResources, getLessons, getClasses } from '@/lib/content';
+
+export default async function Home() {
+  const [posts, resources, lessons, classes] = await Promise.all([
+    getPosts(),
+    getResources(),
+    getLessons(),
+    getClasses(),
+  ]);
+
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
       <HeroSection />
-      <LearningPrograms />
-      <IhcChronicles />
-      <ResourceBank />
+      <LearningPrograms initialLessons={lessons} />
+      <IhcChronicles initialArticles={posts} />
+      <ResourceBank initialResources={resources} />
       <StudentFeedback />
-      <SidebarNoticeBoard />
+      <SidebarNoticeBoard initialClasses={classes} />
       <Footer />
     </main>
   );

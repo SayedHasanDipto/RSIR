@@ -1,18 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Github, Chrome as Google, AlertCircle } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Chrome as Google, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Facebook } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -43,7 +42,7 @@ export default function LoginPage() {
         setLoading(false);
         localStorage.setItem('userLoggedIn', 'true');
         const redirectUrl = searchParams.get('redirect') || '/';
-        router.push(redirectUrl);
+        window.location.href = redirectUrl;
       },
       onError: (ctx) => {
         setLoading(false);
@@ -129,7 +128,7 @@ export default function LoginPage() {
                 </motion.div>
               )}
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 <Button
                   type="button"
                   onClick={() => handleSocialLogin('google')}
@@ -207,5 +206,17 @@ export default function LoginPage() {
         </Card>
       </motion.div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#0f1a35]">
+        <div className="text-white text-lg font-semibold animate-pulse">Loading login page...</div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

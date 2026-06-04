@@ -2,21 +2,29 @@
 
 import { File, ArrowDownToLine } from '@gravity-ui/icons';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { StaggerReveal } from './stagger-reveal';
 import { RevealAnimation } from './reveal-animation';
 
-const resources = [
-  { id: 1, name: 'English Grammar Complete Guide', category: 'English', date: 'May 12, 2024', size: '2.4 MB' },
-  { id: 2, name: 'IELTS Speaking Preparation', category: 'English', date: 'May 10, 2024', size: '1.8 MB' },
-  { id: 3, name: 'Advanced Vocabulary List', category: 'English', date: 'May 8, 2024', size: '0.9 MB' },
-  { id: 4, name: 'Islamic History Timeline', category: 'IHC', date: 'May 7, 2024', size: '3.2 MB' },
-  { id: 5, name: 'Ottoman Empire Study Notes', category: 'IHC', date: 'May 5, 2024', size: '2.1 MB' },
-  { id: 6, name: 'Quranic Verse Compilation', category: 'IHC', date: 'May 3, 2024', size: '1.5 MB' },
-  { id: 7, name: 'Essay Writing Techniques', category: 'English', date: 'April 30, 2024', size: '1.3 MB' },
-  { id: 8, name: 'Islamic Art Reference Guide', category: 'IHC', date: 'April 28, 2024', size: '4.7 MB' },
-];
+export function ResourceBank({ initialResources = [] }) {
+  const router = useRouter();
 
-export function ResourceBank() {
+  // Transform DB resources into display format
+  const resources = initialResources.map((r) => ({
+    id: r._id,
+    name: r.title || 'Untitled Resource',
+    category: r.category || 'General',
+    date: r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—',
+    size: r.fileSize ? `${(r.fileSize / (1024 * 1024)).toFixed(1)} MB` : '—',
+    fileUrl: r.fileUrl || null,
+    description: r.description || '',
+  }));
+
+  // Don't render section if no resources
+  if (resources.length === 0) {
+    return null;
+  }
+
   return (
     <section id="resources" className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,7 +48,7 @@ export function ResourceBank() {
               </tr>
             </thead>
             <StaggerReveal as="tbody" selector="tr" className="divide-y divide-border/50">
-                {resources.map((resource, index) => (
+                {resources.slice(0, 4).map((resource, index) => (
                   <motion.tr
                     key={resource.id}
                     whileHover={{ backgroundColor: "rgba(249, 250, 251, 1)" }}
@@ -51,14 +59,21 @@ export function ResourceBank() {
                     <td className="px-4 sm:px-8 py-5">
                       <div className="flex items-center gap-2 sm:gap-3">
                         <File className="w-5 h-5 text-gold flex-shrink-0" />
-                        <span className="font-bold text-primary line-clamp-1">{resource.name}</span>
+                        <div>
+                          <span className="font-bold text-primary line-clamp-1">{resource.name}</span>
+                          {resource.description && (
+                            <p className="text-xs text-foreground/40 line-clamp-1 mt-0.5">{resource.description}</p>
+                          )}
+                        </div>
                       </div>
                     </td>
                     <td className="px-4 sm:px-8 py-5">
                       <span className={`inline-flex px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-tighter ${
-                        resource.category === 'English'
+                        resource.category === 'English' || resource.category === 'English Hub'
                           ? 'bg-blue-100 text-blue-700'
-                           : 'bg-amber-100 text-amber-700'
+                          : resource.category === 'IHC' || resource.category === 'IHC Chronicles'
+                          ? 'bg-amber-100 text-amber-700'
+                          : 'bg-emerald-100 text-emerald-700'
                       }`}>
                         {resource.category}
                       </span>
@@ -67,14 +82,26 @@ export function ResourceBank() {
                     <td className="px-4 sm:px-8 py-5 text-foreground/50 font-medium">{resource.size}</td>
                     <td className="px-4 sm:px-8 py-5">
                       <div className="flex justify-center">
-                        <motion.button 
-                          whileHover={{ scale: 1.05, backgroundColor: '#c9ad67' }}
-                          whileTap={{ scale: 0.95 }}
-                          className="flex items-center gap-2 bg-gold text-primary px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold transition-all shadow-md group"
-                        >
-                          <ArrowDownToLine className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
-                          <span className="hidden lg:inline">Download</span>
-                        </motion.button>
+                        {resource.fileUrl ? (
+                          <motion.button 
+                            onClick={(e) => {
+                              const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+                              if (isLoggedIn) {
+                                window.open(resource.fileUrl, '_blank');
+                              } else {
+                                router.push('/login?redirect=/');
+                              }
+                            }}
+                            whileHover={{ scale: 1.05, backgroundColor: '#c9ad67' }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex items-center gap-2 bg-gold text-primary px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold transition-all shadow-md group"
+                          >
+                            <ArrowDownToLine className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
+                            <span className="hidden lg:inline">Download</span>
+                          </motion.button>
+                        ) : (
+                          <span className="text-xs text-foreground/30 font-medium">No file</span>
+                        )}
                       </div>
                     </td>
                   </motion.tr>
@@ -93,13 +120,24 @@ export function ResourceBank() {
                 </p>
                 <p className="text-foreground/60">All files are in high-quality PDF format and optimized for reading.</p>
               </div>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                className="bg-primary text-white px-8 py-3 rounded-xl font-bold shadow-lg"
-              >
-                Get All Access
-              </motion.button>
+              <div>
+                <motion.button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+                    if (isLoggedIn) {
+                      router.push('/resources');
+                    } else {
+                      router.push('/login?redirect=/resources');
+                    }
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-primary text-white px-8 py-3 rounded-xl font-bold shadow-lg"
+                >
+                  সবগুলো পিডিএফ দেখুন (See All)
+                </motion.button>
+              </div>
             </div>
           </div>
         </RevealAnimation>

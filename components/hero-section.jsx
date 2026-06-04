@@ -2,6 +2,8 @@
 
 import { ArrowRight } from '@gravity-ui/icons';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -10,6 +12,7 @@ import { Counter } from './counter';
 import { FloatingAnimation } from './floating-animation';
 
 export function HeroSection() {
+  const router = useRouter();
   const containerRef = useRef(null);
   const headlineRef = useRef(null);
 
@@ -109,17 +112,35 @@ export function HeroSection() {
 
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center md:justify-start">
               <motion.button
+                onClick={(e) => {
+                  e.preventDefault();
+                  const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+                  if (isLoggedIn) {
+                    router.push('/lessons');
+                  } else {
+                    router.push('/login?redirect=/lessons');
+                  }
+                }}
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(22, 33, 62, 0.3)" }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-primary hover:bg-primary-navy-light text-white px-8 md:px-10 py-4 rounded-xl font-bold transition-all flex items-center gap-2 justify-center group"
+                className="w-full sm:w-auto bg-primary hover:bg-primary-navy-light text-white px-8 md:px-10 py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 group"
               >
                 Explore Lessons
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </motion.button>
               <motion.button
+                onClick={(e) => {
+                  e.preventDefault();
+                  const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+                  if (isLoggedIn) {
+                    router.push('/#ihc');
+                  } else {
+                    router.push('/login?redirect=/#ihc');
+                  }
+                }}
                 whileHover={{ scale: 1.05, backgroundColor: "rgba(201, 173, 103, 0.1)" }}
                 whileTap={{ scale: 0.98 }}
-                className="border-2 border-gold text-primary px-8 md:px-10 py-4 rounded-xl font-bold transition-all text-center"
+                className="w-full sm:w-auto border-2 border-gold text-primary px-8 md:px-10 py-4 rounded-xl font-bold transition-all text-center"
               >
                 Learn More
               </motion.button>

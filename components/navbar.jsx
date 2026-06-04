@@ -34,20 +34,18 @@ export function Navbar() {
   }, []);
 
   const navItems = [
-    { label: 'Home', href: '/#home' },
-    { label: 'English Hub', href: '/#english' },
+    { label: 'Home', href: '/' },
+    { label: 'Video Lessons', href: '/lessons' },
     { label: 'IHC Chronicles', href: '/#ihc' },
     { label: 'Resource Bank', href: '/#resources' },
   ];
 
   const handleNavLinkClick = (e, item) => {
-    if (item.label === 'IHC Chronicles') {
-      e.preventDefault();
+    if (item.label !== 'Home') {
       const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-      if (isLoggedIn) {
-        router.push('/articles');
-      } else {
-        router.push('/login?redirect=/articles');
+      if (!isLoggedIn) {
+        e.preventDefault();
+        router.push(`/login?redirect=${item.href}`);
       }
     }
   };
@@ -141,9 +139,8 @@ export function Navbar() {
                       onClick={async () => {
                         setIsOpen(false);
                         await authClient.signOut();
-                        localStorage.removeItem('userLoggedIn');
-                        router.push('/');
-                        router.refresh();
+                        localStorage.setItem('userLoggedIn', 'false');
+                        window.location.href = '/';
                       }}
                       className="w-full text-center py-2.5 border border-white/10 text-white/70 hover:text-white rounded-lg font-medium text-xs cursor-pointer"
                     >
@@ -187,9 +184,8 @@ export function Navbar() {
 
     const handleSignOut = async () => {
       await authClient.signOut();
-      localStorage.removeItem('userLoggedIn');
-      router.push('/');
-      router.refresh();
+      localStorage.setItem('userLoggedIn', 'false');
+      window.location.href = '/';
     };
 
     if (isPending) {

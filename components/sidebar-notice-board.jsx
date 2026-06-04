@@ -1,12 +1,27 @@
 'use client';
 
-import { Clock, Calendar, Bell, ArrowRight } from '@gravity-ui/icons';
+import { Clock, Calendar, Bell, ArrowRight, Persons } from '@gravity-ui/icons';
 import { FaFacebook } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { StaggerReveal } from './stagger-reveal';
 import { RevealAnimation } from './reveal-animation';
 
-export function SidebarNoticeBoard() {
+export function SidebarNoticeBoard({ initialClasses = [] }) {
+  const classes = initialClasses;
+
+  const formatDate = (dateVal) => {
+    if (!dateVal) return '—';
+    try {
+      return new Date(dateVal).toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+      });
+    } catch {
+      return String(dateVal);
+    }
+  };
+
   return (
     <section className="py-24 bg-[#fcfcfc] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,34 +39,51 @@ export function SidebarNoticeBoard() {
                 </div>
               </div>
 
-              <StaggerReveal selector=".class-item" className="space-y-4">
-                {[
-                  { title: 'Advanced Grammar Mastery', type: 'English Hub Session', time: 'Monday, May 20 • 6:00 PM', color: 'border-gold', seats: 30 },
-                  { title: 'Islamic Civilization 101', type: 'IHC Chronicles Session', time: 'Wednesday, May 22 • 7:30 PM', color: 'border-primary', seats: 25 },
-                  { title: 'IELTS Speaking Workshop', type: 'English Hub Session', time: 'Friday, May 24 • 5:00 PM', color: 'border-gold', seats: 20 },
-                  { title: 'Ottoman Empire Deep Dive', type: 'IHC Chronicles Session', time: 'Saturday, May 25 • 2:00 PM', color: 'border-primary', seats: 35 },
-                ].map((cls, i) => (
-                  <motion.div
-                    key={i}
-                    whileHover={{ x: 10, backgroundColor: "rgba(249, 250, 251, 1)" }}
-                    className={`class-item border-l-4 ${cls.color} pl-6 py-5 rounded-r-2xl transition-all cursor-pointer bg-white group`}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="font-bold text-xl text-primary mb-1 group-hover:text-gold transition-colors">{cls.title}</p>
-                        <p className="text-sm font-semibold text-foreground/40 uppercase tracking-widest">{cls.type}</p>
+              {classes.length > 0 ? (
+                <StaggerReveal selector=".class-item" className="space-y-4">
+                  {classes.map((cls, i) => (
+                    <motion.div
+                      key={cls._id || i}
+                      whileHover={{ x: 10, backgroundColor: 'rgba(249, 250, 251, 1)' }}
+                      className={`class-item border-l-4 ${cls.color || 'border-gold'} pl-6 py-5 rounded-r-2xl transition-all cursor-pointer bg-white group`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="font-bold text-xl text-primary mb-1 group-hover:text-gold transition-colors">
+                            {cls.title}
+                          </p>
+                          <p className="text-sm font-semibold text-foreground/40 uppercase tracking-widest">
+                            {cls.type}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2 mt-4 text-sm font-medium text-foreground/60">
-                      <Clock className="w-4 h-4 text-gold" />
-                      <span>{cls.time} • <span className="text-primary font-bold">{cls.seats} seats available</span></span>
-                    </div>
-                  </motion.div>
-                ))}
-              </StaggerReveal>
+                      <div className="flex items-center gap-4 mt-4 text-sm font-medium text-foreground/60 flex-wrap">
+                        <span className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-gold" />
+                          {formatDate(cls.date)} &bull; {cls.time}
+                        </span>
+                        {cls.seats > 0 && (
+                          <span className="flex items-center gap-1.5">
+                            <Persons className="w-4 h-4 text-primary" />
+                            <span className="text-primary font-bold">{cls.seats} seats available</span>
+                          </span>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </StaggerReveal>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <div className="w-16 h-16 bg-gold/5 rounded-2xl flex items-center justify-center mb-4">
+                    <Calendar className="w-8 h-8 text-gold/40" />
+                  </div>
+                  <p className="text-foreground/40 font-semibold text-lg">No upcoming classes</p>
+                  <p className="text-foreground/30 text-sm mt-1">Check back soon for new sessions.</p>
+                </div>
+              )}
 
               <motion.button
-                whileHover={{ scale: 1.02, backgroundColor: "rgba(22, 33, 62, 0.95)" }}
+                whileHover={{ scale: 1.02, backgroundColor: 'rgba(22, 33, 62, 0.95)' }}
                 whileTap={{ scale: 0.98 }}
                 className="w-full mt-10 bg-primary text-white py-5 rounded-2xl font-bold transition-all shadow-lg flex items-center justify-center gap-2"
               >
@@ -150,7 +182,7 @@ export function SidebarNoticeBoard() {
                     className="w-full px-5 py-4 rounded-2xl border border-border/50 bg-white/80 backdrop-blur-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-gold transition-all"
                   />
                   <motion.button
-                    whileHover={{ scale: 1.02, backgroundColor: "#b39a5c" }}
+                    whileHover={{ scale: 1.02, backgroundColor: '#b39a5c' }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full bg-gold text-primary py-4 rounded-2xl font-bold transition-all shadow-lg"
                   >

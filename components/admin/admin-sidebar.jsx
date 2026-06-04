@@ -12,9 +12,11 @@ import {
   ChevronLeft, 
   Menu,
   Plus,
-  Home
+  Home,
+  Calendar
 } from 'lucide-react';
 import { useState } from 'react';
+import { authClient } from '@/lib/auth-client';
 
 const navItems = [
   { 
@@ -49,6 +51,11 @@ const navItems = [
       { label: 'All Resources', href: '/admin/resources' },
       { label: 'Upload New', href: '/admin/resources/new' },
     ],
+  },
+  {
+    label: 'Upcoming Classes',
+    href: '/admin/classes',
+    icon: Calendar,
   },
 ];
 
@@ -156,6 +163,17 @@ export function AdminSidebar() {
           <Home className="w-5 h-5" />
           {!collapsed && <span className="text-sm font-medium">View Site</span>}
         </Link>
+        <button
+          onClick={async () => {
+            await authClient.signOut();
+            localStorage.setItem('userLoggedIn', 'false');
+            window.location.href = '/login';
+          }}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400/60 hover:text-red-400 hover:bg-red-500/10 transition-all"
+        >
+          <LogOut className="w-5 h-5" />
+          {!collapsed && <span className="text-sm font-medium">Logout</span>}
+        </button>
       </div>
     </div>
   );

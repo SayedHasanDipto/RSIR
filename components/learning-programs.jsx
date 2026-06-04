@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BookOpen, 
@@ -19,99 +20,52 @@ import {
 import { RevealAnimation } from './reveal-animation';
 import { StaggerReveal } from './stagger-reveal';
 
-const programs = [
-  {
-    id: 'english-mastery',
-    title: 'English Mastery Hub',
-    subtitle: 'ইংরেজি দক্ষতা অর্জন',
-    description: 'সহজ ও কার্যকর পদ্ধতিতে শূন্য থেকে অ্যাডভান্স লেভেলের ইংরেজি শিখুন। ব্যাকরণ ও বাস্তব জীবনের কথোপকথনে দক্ষ হয়ে উঠুন।',
-    icon: BookOpen,
-    color: 'from-blue-600/10 to-indigo-600/10',
-    glowColor: 'rgba(59, 130, 246, 0.15)',
-    iconBg: 'bg-blue-500/10 text-blue-500',
-    tag: 'জনপ্রিয়',
-    duration: '৪ মাস',
-    modulesCount: '১৬টি মডিউল',
-    enrolledCount: '১২০০+ শিক্ষার্থী',
-    benefits: [
-      'ব্যবহারিক ইংরেজি ব্যাকরণ ও ভোকাবুলারি',
-      'দৈনন্দিন কথোপকথনের নিয়মিত প্র্যাকটিস সেশন',
-      'উচ্চারণ ও ফোনেটিক্স (Pronunciation & Phonetics)',
-      'সারাজীবন লাইভ মেন্টরশিপ ও গ্রুপ স্টাডি সাপোর্ট'
-    ],
-    cta: 'শুরু করুন',
-    link: '/signup'
-  },
-  {
-    id: 'ielts-blueprint',
-    title: 'IELTS Band 7.5+ Blueprint',
-    subtitle: 'আইইএলটিএস প্রস্তুতি',
-    description: 'উচ্চশিক্ষা ও ক্যারিয়ার গঠনে প্রয়োজনীয় IELTS স্কোরে পৌঁছাতে সম্পূর্ণ গাইডলাইন। রিয়েল-টাইম মক টেস্ট ও মেন্টর ফিডব্যাক।',
-    icon: Award,
-    color: 'from-amber-600/10 to-orange-600/10',
-    glowColor: 'rgba(245, 158, 11, 0.15)',
-    iconBg: 'bg-amber-500/10 text-amber-500',
-    tag: 'প্রো',
-    duration: '৩ মাস',
-    modulesCount: '১২টি মডিউল',
-    enrolledCount: '৪৫০+ শিক্ষার্থী',
-    benefits: [
-      '৪টি সেগমেন্ট (Listening, Reading, Writing, Speaking) কভার',
-      '১-অন-১ স্পিকিং প্র্যাকটিস ও স্পেশাল ফিডব্যাক সেশন',
-      'রাইটিং টাস্ক লাইভ ইভালুয়েশন ও ব্যান্ড স্কোরের প্রজেকশন',
-      '১০+ ফুল-লেন্থ মক টেস্ট ও রিয়েল এক্সাম টিপস'
-    ],
-    cta: 'প্রস্তুতি নিন',
-    link: '/signup'
-  },
-  {
-    id: 'islamic-history',
-    title: 'Islamic History & Culture',
-    subtitle: 'ইসলামী ইতিহাস ও সংস্কৃতি',
-    description: 'ইসলামের সোনালী ইতিহাস, ঐতিহ্য ও সংস্কৃতির গভীরে অনুসন্ধান। সভ্যতার উত্থান-পতন ও আমাদের সমকালীন শিক্ষা।',
-    icon: Compass,
-    color: 'from-emerald-600/10 to-teal-600/10',
-    glowColor: 'rgba(16, 185, 129, 0.15)',
-    iconBg: 'bg-emerald-500/10 text-emerald-500',
-    tag: 'ফ্রি কোর্স',
-    duration: 'সেলফ-পেসড',
-    modulesCount: '২৪টি লেকচার',
-    enrolledCount: '৮০০+ শিক্ষার্থী',
-    benefits: [
-      'খোলাফায়ে রাশেদীনের ইতিহাস ও সমকালীন খেলাফত',
-      'ইসলামী সভ্যতার সোনালী যুগ ও বিজ্ঞানচর্চা',
-      'ঐতিহাসিক মানচিত্র ও ডকুমেন্টারি ভিডিও মডিউলস',
-      'সাপ্তাহিক স্পেশাল লাইভ আলোচনা ও কুইজ সেশন'
-    ],
-    cta: 'অন্বেষণ করুন',
-    link: '/signup'
-  },
-  {
-    id: 'academic-support',
-    title: 'Academic Foundation',
-    subtitle: 'একাডেমিক সাপোর্ট',
-    description: 'স্কুল, কলেজ ও মাদ্রাসা সিলেবাসের ওপর বোর্ড পরীক্ষার সিলেবাস নিখুঁতভাবে শেষ করতে বিশেষ একাডেমিক মেন্টরশিপ।',
-    icon: GraduationCap,
-    color: 'from-purple-600/10 to-pink-600/10',
-    glowColor: 'rgba(168, 85, 247, 0.15)',
-    iconBg: 'bg-purple-500/10 text-purple-500',
-    tag: 'একাডেমিক',
-    duration: '৬ মাস',
-    modulesCount: '৩০টি মডিউল',
-    enrolledCount: '৬০০+ শিক্ষার্থী',
-    benefits: [
-      'এইচএসসি ও আলিম সিলেবাসের ওপর পূর্ণাঙ্গ প্রস্তুতি',
-      'জটিল অধ্যায়গুলোর সহজতম বাংলা ব্যাখ্যা ও ক্লাস',
-      'এক্সাম হ্যাকস ও টেস্ট পেপার সলভ করার কৌশল',
-      'প্রতি সপ্তাহের বিশেষ ডাউট-ক্লিয়ারিং প্র্যাক্টিক্যাল ক্লাস'
-    ],
-    cta: 'ভর্তি হোন',
-    link: '/signup'
-  }
-];
-
-export function LearningPrograms() {
+export function LearningPrograms({ initialLessons = [] }) {
+  const router = useRouter();
   const [expandedId, setExpandedId] = useState(null);
+
+  if (!initialLessons || initialLessons.length === 0) {
+    return null;
+  }
+
+  const programs = initialLessons.map((lesson, index) => ({
+    id: lesson._id,
+    title: lesson.title,
+    subtitle: lesson.category,
+    description: lesson.description || 'No description provided.',
+    icon: [BookOpen, Award, Compass, GraduationCap][index % 4],
+    color: [
+      'from-blue-600/10 to-indigo-600/10',
+      'from-amber-600/10 to-orange-600/10',
+      'from-emerald-600/10 to-teal-600/10',
+      'from-purple-600/10 to-pink-600/10'
+    ][index % 4],
+    glowColor: [
+      'rgba(59, 130, 246, 0.15)',
+      'rgba(245, 158, 11, 0.15)',
+      'rgba(16, 185, 129, 0.15)',
+      'rgba(168, 85, 247, 0.15)'
+    ][index % 4],
+    iconBg: [
+      'bg-blue-500/10 text-blue-500',
+      'bg-amber-500/10 text-amber-500',
+      'bg-emerald-500/10 text-emerald-500',
+      'bg-purple-500/10 text-purple-500'
+    ][index % 4],
+    tag: lesson.difficulty || 'Intermediate',
+    duration: lesson.duration || 'N/A',
+    modulesCount: 'Video Lesson',
+    enrolledCount: 'Available Now',
+    benefits: [
+      'Comprehensive Video Content',
+      `Instructor: ${lesson.instructor || 'RSIR Expert'}`,
+      `Category: ${lesson.category}`
+    ],
+    cta: 'Watch Now',
+    link: `/lessons/${lesson._id}`
+  }));
+
+
 
   const toggleExpand = (id) => {
     if (expandedId === id) {
@@ -138,7 +92,7 @@ export function LearningPrograms() {
           
           <RevealAnimation direction="up" delay={0.1}>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-primary mb-4 tracking-tight leading-tight">
-              আমাদের <span className="text-gold">সিগনেচার প্রোগ্রামসমূহ</span>
+              আমাদের <span className="text-gold">ভিডিও লেসনসমূহ</span>
             </h2>
           </RevealAnimation>
 
@@ -151,7 +105,7 @@ export function LearningPrograms() {
 
         {/* Interactive Grid */}
         <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-          {programs.map((program) => {
+          {programs.slice(0, 4).map((program) => {
             const Icon = program.icon;
             const isExpanded = expandedId === program.id;
 
@@ -264,19 +218,25 @@ export function LearningPrograms() {
         {/* Global CTA below the grid */}
         <div className="mt-16 text-center">
           <RevealAnimation direction="up" delay={0.3}>
-            <div className="inline-flex flex-col sm:flex-row items-center gap-4 p-4 rounded-3xl bg-card/40 backdrop-blur-md border border-border/60 shadow-xl max-w-xl mx-auto">
-              <span className="text-sm sm:text-base font-bold text-foreground/75 px-3">
-                আপনার জন্য কোন লার্নিং ট্র্যাকটি উপযুক্ত বুঝতে পারছেন না?
-              </span>
-              <Link href="/signup">
-                <button className="px-6 py-3 bg-gold text-primary font-extrabold rounded-2xl hover:bg-gold-light hover:scale-105 transition-all shadow-md">
-                  ফ্রি কাউন্সেলিং নিন
-                </button>
-              </Link>
-            </div>
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+                if (isLoggedIn) {
+                  router.push('/lessons');
+                } else {
+                  router.push('/login?redirect=/lessons');
+                }
+              }}
+              className="px-10 py-4 bg-gold hover:bg-gold-light text-primary-navy font-extrabold rounded-2xl shadow-xl shadow-gold/10 hover:shadow-gold/25 transition-all flex items-center gap-2 mx-auto group"
+            >
+              সবগুলো ভিডিও লেসন দেখুন (See All)
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
           </RevealAnimation>
         </div>
       </div>
     </section>
   );
 }
+
