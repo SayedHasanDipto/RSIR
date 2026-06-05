@@ -15,7 +15,7 @@ export function ResourceBank({ initialResources = [] }) {
     name: r.title || 'Untitled Resource',
     category: r.category || 'General',
     date: r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—',
-    size: r.fileSize ? `${(r.fileSize / (1024 * 1024)).toFixed(1)} MB` : '—',
+    size: r.fileSize ? (r.fileSize < 1024 * 1024 ? `${(r.fileSize / 1024).toFixed(1)} KB` : `${(r.fileSize / (1024 * 1024)).toFixed(1)} MB`) : '—',
     fileUrl: r.fileUrl || null,
     description: r.description || '',
   }));
