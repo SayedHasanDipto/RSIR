@@ -5,8 +5,9 @@ export async function middleware(request) {
   
   // Only protect /admin routes
   if (pathname.startsWith('/admin')) {
-    // Check for Better Auth session cookie
-    const sessionToken = request.cookies.get('better-auth.session_token')?.value;
+    // Check for Better Auth session cookie (handles both dev and production environments)
+    const sessionToken = request.cookies.get('better-auth.session_token')?.value || 
+                         request.cookies.get('__Secure-better-auth.session_token')?.value;
     
     if (!sessionToken) {
       // Redirect to login if no session
