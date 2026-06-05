@@ -40,12 +40,6 @@ export function LearningPrograms({ initialLessons = [] }) {
       'from-emerald-600/10 to-teal-600/10',
       'from-purple-600/10 to-pink-600/10'
     ][index % 4],
-    glowColor: [
-      'rgba(59, 130, 246, 0.15)',
-      'rgba(245, 158, 11, 0.15)',
-      'rgba(16, 185, 129, 0.15)',
-      'rgba(168, 85, 247, 0.15)'
-    ][index % 4],
     iconBg: [
       'bg-blue-500/10 text-blue-500',
       'bg-amber-500/10 text-amber-500',
@@ -65,19 +59,13 @@ export function LearningPrograms({ initialLessons = [] }) {
     link: `/lessons/${lesson._id}`
   }));
 
-
-
   const toggleExpand = (id) => {
-    if (expandedId === id) {
-      setExpandedId(null);
-    } else {
-      setExpandedId(id);
-    }
+    setExpandedId(expandedId === id ? null : id);
   };
 
   return (
     <section id="programs" className="py-24 bg-background relative overflow-hidden">
-      {/* Background soft glowing lights */}
+      {/* Background soft glowing lights - CSS only */}
       <div className="absolute top-1/4 left-1/10 w-96 h-96 bg-primary-navy-light/10 rounded-full blur-[120px] -z-10" />
       <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-gold/5 rounded-full blur-[120px] -z-10" />
 
@@ -96,29 +84,23 @@ export function LearningPrograms({ initialLessons = [] }) {
             </h2>
           </RevealAnimation>
 
-          <RevealAnimation direction="up" delay={0.2}>
+          <RevealAnimation direction="up" delay={0.15}>
             <p className="text-foreground/70 text-base sm:text-lg max-w-2xl mx-auto font-medium">
-              দক্ষ মেন্টরশিপ ও আধুনিক কারিকুলামের মাধ্যমে আপনার দক্ষতাকে নতুন উচ্চতায় নিয়ে যাওয়ার জন্য বিশেষভাবে ডিজাইনকৃত কোর্সসমূহ।
+              দক্ষ মেন্টরশিপ ও আধুনিক কারিকুলামের মাধ্যমে আপনার দক্ষতাকে নতুন উচ্চতায় নিয়ে যাওয়ার জন্য বিশেষভাবে ডিজাইনকৃত কোর্সসমূহ।
             </p>
           </RevealAnimation>
         </div>
 
-        {/* Interactive Grid */}
+        {/* Interactive Grid — removed layout prop from cards */}
         <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
           {programs.slice(0, 4).map((program) => {
             const Icon = program.icon;
             const isExpanded = expandedId === program.id;
 
             return (
-              <motion.div
+              <div
                 key={program.id}
-                layout
-                whileHover={{ 
-                  y: -6,
-                  boxShadow: `0 20px 40px -15px ${program.glowColor || 'rgba(0,0,0,0.1)'}`
-                }}
-                transition={{ duration: 0.3 }}
-                className={`group bg-card/60 backdrop-blur-md rounded-3xl border border-border/80 p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 relative overflow-hidden`}
+                className="group bg-card/60 backdrop-blur-md rounded-3xl border border-border/80 p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 relative overflow-hidden hover:-translate-y-1.5 hover:shadow-xl"
               >
                 {/* Decorative program glow background */}
                 <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${program.color} rounded-bl-full blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-500 -z-10`} />
@@ -162,30 +144,22 @@ export function LearningPrograms({ initialLessons = [] }) {
                     </div>
                   </div>
 
-                  {/* Expandable Benefits Area */}
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="space-y-3 pb-6">
-                          <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">
-                            প্রোগ্রাম এর মূল সুবিধাসমূহ:
-                          </h4>
-                          {program.benefits.map((benefit, idx) => (
-                            <div key={idx} className="flex items-start gap-2.5 text-foreground/80 text-sm">
-                              <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500 shrink-0 mt-0.5" />
-                              <span className="font-medium leading-relaxed">{benefit}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {/* Expandable Benefits Area — simplified animation */}
+                  {isExpanded && (
+                    <div className="overflow-hidden animate-expand-in">
+                      <div className="space-y-3 pb-6">
+                        <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">
+                          প্রোগ্রাম এর মূল সুবিধাসমূহ:
+                        </h4>
+                        {program.benefits.map((benefit, idx) => (
+                          <div key={idx} className="flex items-start gap-2.5 text-foreground/80 text-sm">
+                            <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500 shrink-0 mt-0.5" />
+                            <span className="font-medium leading-relaxed">{benefit}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Actions Bar */}
@@ -195,12 +169,7 @@ export function LearningPrograms({ initialLessons = [] }) {
                     className="flex items-center justify-center gap-2 py-2 px-4 rounded-xl text-primary/70 hover:text-gold text-sm font-bold border border-border/80 hover:border-gold/30 hover:bg-gold/5 transition-all"
                   >
                     <span>{isExpanded ? 'লুকান' : 'বিস্তারিত মডিউল'}</span>
-                    <motion.div
-                      animate={{ rotate: isExpanded ? 180 : 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ChevronDown className="w-4 h-4" />
-                    </motion.div>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
                   </button>
 
                   <Link href={program.link} className="shrink-0">
@@ -210,14 +179,14 @@ export function LearningPrograms({ initialLessons = [] }) {
                     </button>
                   </Link>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </StaggerReveal>
 
         {/* Global CTA below the grid */}
         <div className="mt-16 text-center">
-          <RevealAnimation direction="up" delay={0.3}>
+          <RevealAnimation direction="up" delay={0.2}>
             <button 
               onClick={(e) => {
                 e.preventDefault();
@@ -239,4 +208,3 @@ export function LearningPrograms({ initialLessons = [] }) {
     </section>
   );
 }
-

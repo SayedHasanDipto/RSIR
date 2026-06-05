@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   BookOpen,
   Clock,
@@ -95,7 +95,7 @@ export function IhcChronicles({ initialArticles = [] }) {
 
   return (
     <section id="ihc" className="py-24 bg-[#0a0f1d] text-white relative overflow-hidden">
-      {/* Decorative cosmic background glows */}
+      {/* Decorative cosmic background glows — CSS only */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[150px] pointer-events-none -z-10" />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[150px] pointer-events-none -z-10" />
 
@@ -116,7 +116,7 @@ export function IhcChronicles({ initialArticles = [] }) {
             </h2>
           </RevealAnimation>
 
-          <RevealAnimation direction="up" delay={0.2}>
+          <RevealAnimation direction="up" delay={0.15}>
             <p className="text-white/70 text-base sm:text-lg max-w-2xl mx-auto font-medium">
               ইসলামী স্বর্ণযুগের জ্ঞানবিজ্ঞান, ইতিহাস এবং নন্দনতত্ত্বের অমূল্য নিদর্শনসমূহ নিয়ে বিশেষ বুদ্ধিবৃত্তিক ও গবেষণাধর্মী আর্টিকেল কালেকশন।
             </p>
@@ -131,7 +131,7 @@ export function IhcChronicles({ initialArticles = [] }) {
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`relative px-5 py-2.5 rounded-xl font-bold transition-all text-xs sm:text-sm whitespace-nowrap ${activeCategory === cat.id
+                  className={`relative px-5 py-2.5 rounded-xl font-bold transition-all duration-200 text-xs sm:text-sm whitespace-nowrap ${activeCategory === cat.id
                     ? 'text-primary-navy bg-gold shadow-lg shadow-gold/20'
                     : 'text-white/60 hover:text-white hover:bg-white/5'
                     }`}
@@ -143,84 +143,73 @@ export function IhcChronicles({ initialArticles = [] }) {
           </div>
         )}
 
-        {/* Articles Grid */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredArticles.slice(0, 4).map((article) => {
-              const Icon = article.icon;
-              return (
-                <motion.div
-                  key={article.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.4 }}
-                  whileHover={{ y: -8 }}
-                  onClick={() => setSelectedArticle(article)}
-                  className="bg-slate-900/40 backdrop-blur-md rounded-3xl overflow-hidden border border-white/5 hover:border-gold/30 shadow-xl hover:shadow-gold/5 transition-all duration-300 group cursor-pointer flex flex-col h-full relative"
-                >
-                  {/* Glowing hover light */}
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none"
-                    style={{
-                      background: `radial-gradient(circle at 50% 50%, ${article.accentColor}, transparent 60%)`
-                    }}
+        {/* Articles Grid — removed layout + popLayout for performance */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {filteredArticles.slice(0, 4).map((article) => {
+            return (
+              <div
+                key={article.id}
+                onClick={() => setSelectedArticle(article)}
+                className="bg-slate-900/40 backdrop-blur-md rounded-3xl overflow-hidden border border-white/5 hover:border-gold/30 shadow-xl hover:shadow-gold/5 transition-all duration-300 group cursor-pointer flex flex-col h-full relative hover:-translate-y-2"
+              >
+                {/* Glowing hover light */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at 50% 50%, ${article.accentColor}, transparent 60%)`
+                  }}
+                />
+
+                {/* Image Area */}
+                <div className="relative h-48 sm:h-52 w-full overflow-hidden shrink-0">
+                  <Image
+                    src={article.imageUrl}
+                    alt={article.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1d] via-black/20 to-transparent" />
+                </div>
 
-                  {/* Image Area */}
-                  <div className="relative h-48 sm:h-52 w-full overflow-hidden shrink-0">
-                    <Image
-                      src={article.imageUrl}
-                      alt={article.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1d] via-black/20 to-transparent" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 sm:p-8 flex-grow flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="text-[10px] font-extrabold bg-gold/10 text-gold px-2.5 py-1 rounded-full uppercase tracking-wider border border-gold/15">
-                          {article.categoryLabel}
-                        </span>
-                        <span className="text-[11px] font-medium text-white/40">{article.date}</span>
-                      </div>
-
-                      <h3 className="text-xl font-bold text-white mb-1 group-hover:text-gold transition-colors leading-tight line-clamp-2">
-                        {article.title}
-                      </h3>
-
-                      <p className="text-white/60 text-sm leading-relaxed mb-6 line-clamp-3 font-medium mt-3">
-                        {article.excerpt}
-                      </p>
-                    </div>
-
-                    <div className="pt-4 border-t border-white/5 flex items-center justify-between mt-auto">
-                      <div className="flex items-center gap-1.5 text-white/50 text-xs font-semibold">
-                        <Clock className="w-3.5 h-3.5 text-gold" />
-                        <span>{article.readTime} পাঠ</span>
-                      </div>
-                      <span className="inline-flex items-center gap-1 text-gold group-hover:text-white font-extrabold text-xs tracking-wider transition-colors uppercase">
-                        পড়ুন
-                        <ArrowRight className="w-4 h-4" />
+                {/* Content */}
+                <div className="p-6 sm:p-8 flex-grow flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-[10px] font-extrabold bg-gold/10 text-gold px-2.5 py-1 rounded-full uppercase tracking-wider border border-gold/15">
+                        {article.categoryLabel}
                       </span>
+                      <span className="text-[11px] font-medium text-white/40">{article.date}</span>
                     </div>
+
+                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-gold transition-colors leading-tight line-clamp-2">
+                      {article.title}
+                    </h3>
+
+                    <p className="text-white/60 text-sm leading-relaxed mb-6 line-clamp-3 font-medium mt-3">
+                      {article.excerpt}
+                    </p>
                   </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </motion.div>
+
+                  <div className="pt-4 border-t border-white/5 flex items-center justify-between mt-auto">
+                    <div className="flex items-center gap-1.5 text-white/50 text-xs font-semibold">
+                      <Clock className="w-3.5 h-3.5 text-gold" />
+                      <span>{article.readTime} পাঠ</span>
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-gold group-hover:text-white font-extrabold text-xs tracking-wider transition-colors uppercase">
+                      পড়ুন
+                      <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
         {/* CTA Button */}
         <div className="flex justify-center mt-16">
-          <RevealAnimation direction="up" delay={0.2}>
+          <RevealAnimation direction="up" delay={0.15}>
             <button
               onClick={handleArchiveAccess}
               className="px-10 py-4 bg-gold hover:bg-gold-light text-primary-navy font-extrabold rounded-2xl shadow-xl shadow-gold/10 hover:shadow-gold/25 transition-all flex items-center gap-2 group"
@@ -232,7 +221,7 @@ export function IhcChronicles({ initialArticles = [] }) {
         </div>
       </div>
 
-      {/* READER DIALOG MODAL */}
+      {/* READER DIALOG MODAL — kept AnimatePresence only for modals where it matters */}
       <AnimatePresence>
         {selectedArticle && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10">
@@ -240,14 +229,15 @@ export function IhcChronicles({ initialArticles = [] }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               onClick={() => setSelectedArticle(null)}
               className="absolute inset-0 bg-black/85 backdrop-blur-md"
             />
             <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              initial={{ opacity: 0, y: 30, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 30, scale: 0.95 }}
-              transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
+              exit={{ opacity: 0, y: 20, scale: 0.97 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="bg-[#0e1626] border border-white/10 rounded-3xl w-full max-w-3xl max-h-[85vh] overflow-y-auto relative z-10 shadow-2xl premium-scrollbar flex flex-col"
               data-lenis-prevent="true"
             >
@@ -257,6 +247,7 @@ export function IhcChronicles({ initialArticles = [] }) {
                   alt={selectedArticle.title}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 768px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0e1626] via-black/30 to-transparent" />
                 <button
@@ -317,14 +308,15 @@ export function IhcChronicles({ initialArticles = [] }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               onClick={() => setShowAuthWall(false)}
               className="absolute inset-0 bg-black/90 backdrop-blur-md"
             />
             <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              initial={{ opacity: 0, y: 30, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 30, scale: 0.95 }}
-              transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
+              exit={{ opacity: 0, y: 20, scale: 0.97 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="bg-[#0e1626] border border-white/10 rounded-3xl w-full max-w-md p-6 sm:p-8 relative z-10 shadow-2xl text-center flex flex-col items-center"
             >
               <div className="w-16 h-16 rounded-2xl bg-gold/10 border border-gold/20 flex items-center justify-center text-gold mb-6 shadow-inner animate-pulse">
